@@ -1,0 +1,145 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  transition: background-color var(--motion-slow), padding var(--motion-normal), border-bottom var(--motion-normal);
+  padding: 32px var(--space-desktop);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid transparent;
+}
+
+.scrolled {
+  background-color: rgba(11, 13, 12, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 20px var(--space-desktop);
+  border-bottom: 1px solid var(--color-border-dark);
+}
+
+.logo {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  color: var(--color-off-white);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.desktopNav {
+  display: none;
+}
+
+.navLinks {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+.navLink {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--color-off-white);
+  text-decoration: none;
+  transition: color var(--motion-fast);
+  position: relative;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-off-white);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--motion-normal);
+}
+
+.navLink:hover {
+  color: var(--color-off-white);
+}
+
+.navLink:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.mobileMenuBtn {
+  color: var(--color-off-white);
+  padding: 8px;
+  margin: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Fullscreen Menu */
+.mobileMenuOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--color-near-black);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 20px var(--space-mobile);
+}
+
+.mobileMenuHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 40px;
+}
+
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-top: 40px;
+}
+
+.mobileNavLink {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--color-off-white);
+  text-decoration: none;
+}
+
+@media (min-width: 1024px) {
+  .desktopNav {
+    display: block;
+  }
+  .mobileMenuBtn {
+    display: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  .header {
+    padding: 20px var(--space-mobile);
+  }
+  .scrolled {
+    padding: 16px var(--space-mobile);
+  }
+  .inquireBtn {
+    display: none;
+  }
+}
