@@ -1,51 +1,99 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import styles from './Header.module.css';
 import { MenuIcon, CloseIcon } from './Icons';
 import { Button } from './Button';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Header = () => {
-  const [scrolled, setScrolled] = useState(false);
+  const [headerTheme, setHeaderTheme] = useState('transparent');
+  const [activeSection, setActiveSection] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
+    // Reset theme to transparent on top if on home page
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      if (window.scrollY < 50 && location.pathname === '/') {
+        setHeaderTheme('transparent');
+        setActiveSection('');
+      }
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    
+    // Observer for sections
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const theme = entry.target.getAttribute('data-header-theme');
+          const id = entry.target.id;
+          
+          if (id) setActiveSection(id);
+          
+          if (window.scrollY > 50 || location.pathname !== '/') {
+            if (theme) {
+              setHeaderTheme(theme);
+            }
+          }
+        }
+      });
+    }, { rootMargin: '-10% 0px -80% 0px' });
+
+    // Re-query sections after slight delay to ensure DOM is ready on route change
+    const timeout = setTimeout(() => {
+      const sections = document.querySelectorAll('[data-header-theme]');
+      sections.forEach(s => observer.observe(s));
+      
+      // Initial scroll check
+      if (window.scrollY < 50 && location.pathname === '/') {
+        setHeaderTheme('transparent');
+      } else if (location.pathname !== '/') {
+        // Ensure default dark theme on other pages if no theme section is hit
+        setHeaderTheme(prev => document.querySelector('[data-header-theme]') ? prev : 'dark');
+      }
+    }, 100);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      clearTimeout(timeout);
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [location.pathname]);
 
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
   }, [menuOpen]);
 
   const navLinks = [
-    { name: 'Properties', href: '#' },
-    { name: 'Neighborhoods', href: '#' },
-    { name: 'Our Approach', href: '#' },
-    { name: 'About', href: '#' },
+    { name: 'Properties', href: '/#properties', id: 'properties' },
+    { name: 'Neighborhoods', href: '/#neighborhoods', id: 'neighborhoods' },
+    { name: 'Our Approach', href: '/#approach', id: 'approach' },
+    { name: 'About', href: '/#about', id: 'about' },
   ];
+
+  const headerClass = `${styles.header} ${styles[`theme-${headerTheme}`] || styles['theme-dark']}`;
 
   return (
     <>
-      <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
-        <a href="/" className={styles.logo}>
+      <header className={headerClass}>
+        <Link to="/" className={styles.logo}>
           <span>SULY</span>
           <span>ESTATES</span>
-        </a>
+        </Link>
 
         <nav className={styles.desktopNav}>
           <ul className={styles.navLinks}>
-            {navLinks.map((link) => (
-              <li key={link.name}>
-                <a href={link.href} className={styles.navLink}>{link.name}</a>
-              </li>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id && location.pathname === '/';
+              return (
+                <li key={link.name}>
+                  <Link to={link.href} className={`${styles.navLink} ${isActive ? styles.active : ''}`}>
+                    {link.name}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
@@ -72,10 +120,10 @@ export const Header = () => {
             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
           >
             <div className={styles.mobileMenuHeader}>
-              <a href="/" className={styles.logo} onClick={() => setMenuOpen(false)}>
+              <Link to="/" className={styles.logo} onClick={() => setMenuOpen(false)}>
                 <span>SULY</span>
                 <span>ESTATES</span>
-              </a>
+              </Link>
               <button 
                 className={styles.mobileMenuBtn} 
                 onClick={() => setMenuOpen(false)}
@@ -87,17 +135,20 @@ export const Header = () => {
             
             <nav className={styles.mobileNav}>
               {navLinks.map((link, i) => (
-                <motion.a 
+                <motion.div
                   key={link.name}
-                  href={link.href} 
-                  className={styles.mobileNavLink}
-                  onClick={() => setMenuOpen(false)}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 + (i * 0.1) }}
                 >
-                  {link.name}
-                </motion.a>
+                  <Link 
+                    to={link.href} 
+                    className={styles.mobileNavLink}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {link.name}
+                  </Link>
+                </motion.div>
               ))}
             </nav>
           </motion.div>

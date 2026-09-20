@@ -1,15 +1,16 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './SignatureResidence.module.css';
 import { Button } from '../components/Button';
 
 export const SignatureResidence = () => {
   return (
-    <section className={styles.section}>
+    <section className={styles.section} data-header-theme="dark">
       <div className={styles.container}>
         <div className={styles.imageCol}>
           <img 
-            src="/images/signature.jpg" 
-            alt="Goizha Ridge Residence overlooking Sulaymaniyah" 
+            src="/images/goizha-hero.jpg" 
+            alt="Goizha Residence overlooking Sulaymaniyah" 
             loading="lazy"
             decoding="async"
             className={styles.image}
@@ -19,7 +20,7 @@ export const SignatureResidence = () => {
         <div className={styles.contentCol}>
           <p className={`eyebrow ${styles.eyebrow}`}>Signature Property</p>
           <h2 className={`display-2 ${styles.title}`}>
-            GOIZHA RIDGE RESIDENCE<br />
+            Goizha Residence<br />
             Goizha, Sulaymaniyah
           </h2>
           <p className={styles.description}>
@@ -27,7 +28,7 @@ export const SignatureResidence = () => {
           </p>
           
           <div className={styles.actions}>
-            <Button variant="primary">Explore Residence</Button>
+            <Button as={Link} to="/properties/goizha-residence" variant="primary">Explore Residence</Button>
           </div>
         </div>
       </div>

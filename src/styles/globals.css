@@ -11,7 +11,7 @@
   --color-border-light: rgba(0, 0, 0, 0.12);
 
   /* Typography */
-  --font-display: 'Instrument Serif', serif;
+  --font-display: 'Newsreader', serif;
   --font-body: 'Manrope', sans-serif;
 
   /* Spacing */
@@ -79,17 +79,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .display-1 {
-  font-size: clamp(3rem, 8vw, 6rem);
-  letter-spacing: -0.02em;
+  font-size: clamp(3.5rem, 8vw, 6.5rem);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
 }
 
 .display-2 {
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  letter-spacing: -0.01em;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 .display-3 {
   font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
 }
 
 .eyebrow {
@@ -121,4 +125,10 @@ h1, h2, h3, h4, h5, h6 {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Performance Utilities */
+.content-vis-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 1000px;
 }

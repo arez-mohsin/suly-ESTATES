@@ -1,26 +1,27 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import styles from './Hero.module.css';
 import { Button } from '../components/Button';
 
 const slides = [
   {
     id: 1,
-    image: '/images/hero-1.jpg',
+    image: '/images/goizha-hero.jpg',
     location: 'GOIZHA · SULAYMANIYAH',
-    alt: 'Contemporary hillside luxury villa in Goizha overlooking Sulaymaniyah at dusk'
+    alt: 'Contemporary hillside luxury villa in Goizha overlooking Sulaymaniyah'
   },
   {
     id: 2,
-    image: '/images/hero-2.jpg',
+    image: '/images/sarchinar-hero.jpg',
     location: 'SARCHINAR · SULAYMANIYAH',
-    alt: 'Premium contemporary residential home with a landscaped courtyard in Sarchinar'
+    alt: 'Premium landscaped city residence in Sarchinar'
   },
   {
     id: 3,
-    image: '/images/hero-3.jpg',
-    location: 'CITY RESIDENCE · SULAYMANIYAH',
-    alt: 'High-end modern penthouse terrace overlooking Sulaymaniyah city'
+    image: '/images/tasluja-hero.jpg',
+    location: 'TASLUJA · SULAYMANIYAH',
+    alt: 'Large modern residence exterior with open terrain in Tasluja'
   }
 ];
 
@@ -29,24 +30,22 @@ export const Hero = () => {
   const shouldReduceMotion = useReducedMotion();
   const timerRef = useRef(null);
   
-  // Touch swipe handling
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
 
   const startTimer = useCallback(() => {
-    if (shouldReduceMotion) return; // Disable auto-advance on reduced motion
+    if (shouldReduceMotion) return; 
     
-    clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => {
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5500); // 5.5 seconds per user spec
+    }, 5500); 
   }, [shouldReduceMotion]);
 
   useEffect(() => {
-    // Page Visibility API to pause carousel when tab is hidden
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        clearInterval(timerRef.current);
+        clearTimeout(timerRef.current);
       } else {
         startTimer();
       }
@@ -57,11 +56,10 @@ export const Hero = () => {
 
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-      clearInterval(timerRef.current);
+      clearTimeout(timerRef.current);
     };
-  }, [startTimer]);
+  }, [startTimer, currentSlide]);
 
-  // Preload next images
   useEffect(() => {
     const nextSlide = (currentSlide + 1) % slides.length;
     const img = new Image();
@@ -70,7 +68,7 @@ export const Hero = () => {
 
   const handleManualSelect = (index) => {
     setCurrentSlide(index);
-    startTimer(); // Reset timer on manual interaction
+    startTimer(); 
   };
 
   const handleTouchStart = (e) => {
@@ -83,35 +81,32 @@ export const Hero = () => {
   };
 
   const handleSwipe = () => {
-    const swipeThreshold = 50; // minimum distance
+    const swipeThreshold = 50; 
     if (touchEndX.current < touchStartX.current - swipeThreshold) {
-      // Swipe left -> Next
       setCurrentSlide((prev) => (prev + 1) % slides.length);
       startTimer();
     } else if (touchEndX.current > touchStartX.current + swipeThreshold) {
-      // Swipe right -> Prev
       setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
       startTimer();
     }
   };
 
-  // Animation variants
   const backgroundVariants = {
     initial: { 
       opacity: 0,
-      scale: shouldReduceMotion ? 1 : 1.05 
+      scale: shouldReduceMotion ? 1 : 1.03 
     },
     animate: { 
       opacity: 1,
       scale: 1,
       transition: { 
-        opacity: { duration: 1, ease: "easeInOut" },
-        scale: { duration: 6, ease: "easeOut" } // Slow scale during the slide
+        opacity: { duration: 1.2, ease: "easeInOut" },
+        scale: { duration: 6, ease: "easeOut" } 
       }
     },
     exit: { 
       opacity: 0,
-      transition: { duration: 1, ease: "easeInOut" }
+      transition: { duration: 1.2, ease: "easeInOut" }
     }
   };
 
@@ -121,6 +116,7 @@ export const Hero = () => {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       aria-label="Featured Properties Carousel"
+      data-header-theme="transparent"
     >
       <div className={styles.backgroundLayer}>
         <AnimatePresence initial={false}>
@@ -145,55 +141,59 @@ export const Hero = () => {
 
       <div className={styles.overlay} />
 
-      <div className={styles.content}>
-        <motion.div 
-          className={styles.eyebrow}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <span className={styles.locationBadge}>
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={slides[currentSlide].location}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                {slides[currentSlide].location}
-              </motion.span>
-            </AnimatePresence>
-          </span>
-        </motion.div>
-        
-        <motion.h1 
-          className={`display-1 ${styles.title}`}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
-          Remarkable homes.<br />
-          Distinctive living.
-        </motion.h1>
-        
-        <motion.p 
-          className={styles.description}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-        >
-          Exceptional residences across Sulaymaniyah,
-          selected for architecture, location and quality of life.
-        </motion.p>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-        >
-          <Button variant="primary">Explore Properties</Button>
-        </motion.div>
+      <div className={styles.contentGrid}>
+        <div className={styles.contentMain}>
+          <motion.div 
+            className={styles.eyebrow}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <span className={styles.locationBadge}>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={slides[currentSlide].location}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {slides[currentSlide].location}
+                </motion.span>
+              </AnimatePresence>
+            </span>
+          </motion.div>
+          
+          <motion.h1 
+            className={`display-1 ${styles.title}`}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            Remarkable homes.<br />
+            Distinctive living.
+          </motion.h1>
+          
+          <div className={styles.contentFooter}>
+            <motion.p 
+              className={styles.description}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
+              Exceptional residences across Sulaymaniyah,<br/>
+              selected for architecture, setting and quality of life.
+            </motion.p>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+            >
+              <Button as={Link} to="/properties" variant="transparentOutline">Explore properties</Button>
+            </motion.div>
+          </div>
+        </div>
       </div>
 
       <div className={styles.sliderControls} role="tablist">
@@ -207,6 +207,9 @@ export const Hero = () => {
               onClick={() => handleManualSelect(index)}
             >
               0{index + 1}
+              {currentSlide === index && (
+                <motion.div layoutId="activeSlideIndicator" className={styles.activeIndicator} />
+              )}
             </button>
             {index < slides.length - 1 && <span className={styles.sliderDash} aria-hidden="true">—</span>}
           </React.Fragment>

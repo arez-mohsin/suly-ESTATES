@@ -1,13 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './PropertyCard.module.css';
 import { Icons } from './Icons';
 
 export const PropertyCard = ({ property }) => {
   return (
-    <a href="#" className={styles.card}>
+    <Link to={`/properties/${property.slug}`} className={styles.card}>
       <div className={styles.imageWrapper}>
         <img 
-          src={property.image} 
+          src={property.heroImage || property.image} 
           alt={property.name} 
           loading="lazy"
           decoding="async"
@@ -18,24 +19,22 @@ export const PropertyCard = ({ property }) => {
       <div className={styles.content}>
         <div className={styles.header}>
           <h3 className={styles.name}>{property.name}</h3>
-          <span className={styles.location}>{property.location}</span>
+          <span className={styles.location}>{property.approximateLocation || property.location}</span>
         </div>
         
-        {property.facts && (
-          <div className={styles.facts}>
-            <span>{property.facts.beds}</span>
-            <span className={styles.dot}>•</span>
-            <span>{property.facts.baths}</span>
-            <span className={styles.dot}>•</span>
-            <span>{property.facts.area}</span>
-          </div>
-        )}
+        <div className={styles.facts}>
+          <span>{property.bedrooms} Beds</span>
+          <span className={styles.dot}>•</span>
+          <span>{property.bathrooms} Baths</span>
+          <span className={styles.dot}>•</span>
+          <span>{property.interiorArea} m²</span>
+        </div>
 
         <div className={styles.footer}>
           <span className={styles.price}>{property.price}</span>
           <span className={styles.arrow}><Icons.ArrowRight /></span>
         </div>
       </div>
-    </a>
+    </Link>
   );
 };

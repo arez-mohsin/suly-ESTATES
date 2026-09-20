@@ -58,3 +58,13 @@
   background: none;
   border-color: currentColor;
 }
+
+.transparentOutline {
+  background: rgba(11, 13, 12, 0.2);
+  color: var(--color-warm-ivory);
+  border-color: var(--color-warm-ivory);
+}
+
+.transparentOutline:hover {
+  background: rgba(242, 239, 232, 0.15);
+}

@@ -1,0 +1,33 @@
+.section {
+  padding: var(--space-large-desktop) var(--space-desktop);
+  background-color: var(--color-warm-ivory);
+  color: var(--color-near-black);
+}
+
+.container {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.textColumns {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+@media (max-width: 1023px) {
+  .content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
