@@ -4,7 +4,7 @@ import { locations } from '../data/locations';
 
 export const Neighborhoods = () => {
   return (
-    <section className={styles.section}>
+    <section className={styles.section} id="neighborhoods" data-header-theme="dark">
       <header className={styles.header}>
         <h2 className={`display-3 ${styles.title}`}>Neighborhoods with character</h2>
         <p className={styles.description}>
@@ -14,7 +14,7 @@ export const Neighborhoods = () => {
       
       <div className={styles.grid}>
         {locations.map(location => (
-          <a key={location.id} href="#" className={styles.card}>
+          <a key={location.id} href="#locations" className={styles.card}>
             <img 
               src={location.image} 
               alt={location.imageAlt} 

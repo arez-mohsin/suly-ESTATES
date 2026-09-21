@@ -165,7 +165,8 @@ export const Hero = () => {
           </motion.div>
           
           <motion.h1 
-            className={`display-1 ${styles.title}`}
+            className={styles.title}
+            style={{ fontSize: 'clamp(3.6rem, 5.5vw, 5.4rem)', lineHeight: 1.05, letterSpacing: '-0.02em', fontWeight: 400, fontFamily: 'var(--font-display)' }}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}

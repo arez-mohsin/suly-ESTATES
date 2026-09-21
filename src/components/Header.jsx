@@ -12,52 +12,52 @@ export const Header = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Reset theme to transparent on top if on home page
+    let ticking = false;
+
     const handleScroll = () => {
-      if (window.scrollY < 50 && location.pathname === '/') {
-        setHeaderTheme('transparent');
-        setActiveSection('');
-      }
-    };
-    
-    // Observer for sections
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const theme = entry.target.getAttribute('data-header-theme');
-          const id = entry.target.id;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (window.scrollY < 50 && location.pathname === '/') {
+            setHeaderTheme('transparent');
+            setActiveSection('');
+            ticking = false;
+            return;
+          }
+
+          const headerOffset = 60; // Probe point below top of screen
+          const sections = document.querySelectorAll('[data-header-theme]');
+          let currentSection = null;
           
-          if (id) setActiveSection(id);
-          
-          if (window.scrollY > 50 || location.pathname !== '/') {
-            if (theme) {
-              setHeaderTheme(theme);
+          // Reverse order to pick the last one in DOM if there's overlap (though there shouldn't be)
+          for (let i = sections.length - 1; i >= 0; i--) {
+            const rect = sections[i].getBoundingClientRect();
+            if (rect.top <= headerOffset && rect.bottom > headerOffset) {
+              currentSection = sections[i];
+              break;
             }
           }
-        }
-      });
-    }, { rootMargin: '-10% 0px -80% 0px' });
 
-    // Re-query sections after slight delay to ensure DOM is ready on route change
-    const timeout = setTimeout(() => {
-      const sections = document.querySelectorAll('[data-header-theme]');
-      sections.forEach(s => observer.observe(s));
-      
-      // Initial scroll check
-      if (window.scrollY < 50 && location.pathname === '/') {
-        setHeaderTheme('transparent');
-      } else if (location.pathname !== '/') {
-        // Ensure default dark theme on other pages if no theme section is hit
-        setHeaderTheme(prev => document.querySelector('[data-header-theme]') ? prev : 'dark');
+          if (currentSection) {
+            setHeaderTheme(currentSection.getAttribute('data-header-theme'));
+            if (currentSection.id) setActiveSection(currentSection.id);
+          } else if (location.pathname !== '/') {
+            setHeaderTheme('dark'); // Default for non-home routes if nothing matches
+          }
+          
+          ticking = false;
+        });
+        ticking = true;
       }
-    }, 100);
+    };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Trigger once on mount/route change after a slight delay to let DOM settle
+    const timeout = setTimeout(handleScroll, 100);
 
     return () => {
-      clearTimeout(timeout);
-      observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
+      clearTimeout(timeout);
     };
   }, [location.pathname]);
 
@@ -98,7 +98,14 @@ export const Header = () => {
         </nav>
 
         <div className={styles.actions}>
-          <Button variant="outline" className={styles.inquireBtn} icon={false}>Inquire</Button>
+          <Button 
+            variant="outline" 
+            className={styles.inquireBtn} 
+            icon={false}
+            onClick={() => window.dispatchEvent(new Event('open-consultation'))}
+          >
+            Inquire
+          </Button>
           <button 
             className={styles.mobileMenuBtn} 
             onClick={() => setMenuOpen(true)}

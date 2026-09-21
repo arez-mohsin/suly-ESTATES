@@ -6,27 +6,21 @@ export const PropertyLocationMap = () => {
     <section className={styles.section} id="locations" data-header-theme="dark">
       <div className={styles.container}>
         <div className={styles.header}>
-          <h2 className="display-3">Selected Locations</h2>
+          <p className="eyebrow">Location</p>
+          <h2 className="display-3">Based in Sulaymaniyah</h2>
           <p className={styles.description}>
-            Our portfolio covers the most desirable neighborhoods in Sulaymaniyah, 
-            from the elevation of Goizha to the lush surroundings of Sarchinar.
+            A focused collection of residential property across Sulaymaniyah and its surrounding neighborhoods.
           </p>
         </div>
         <div className={styles.mapWrapper}>
-          <svg viewBox="0 0 800 500" className={styles.mapSvg} fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M100 250 Q300 150 400 300 T700 200" stroke="var(--color-border-dark)" strokeWidth="2" strokeDasharray="4 4" />
-            <circle cx="200" cy="220" r="8" fill="var(--color-off-white)" />
-            <text x="200" y="245" fill="var(--color-off-white)" className={styles.mapText} textAnchor="middle">Tasluja</text>
-            
-            <circle cx="350" cy="280" r="8" fill="var(--color-off-white)" />
-            <text x="350" y="305" fill="var(--color-off-white)" className={styles.mapText} textAnchor="middle">Bakrajo</text>
-            
-            <circle cx="480" cy="210" r="8" fill="var(--color-off-white)" />
-            <text x="480" y="235" fill="var(--color-off-white)" className={styles.mapText} textAnchor="middle">Sarchinar</text>
-            
-            <circle cx="650" cy="180" r="8" fill="var(--color-off-white)" />
-            <text x="650" y="205" fill="var(--color-off-white)" className={styles.mapText} textAnchor="middle">Goizha</text>
-          </svg>
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d103328.71804598914!2d45.36780373024844!3d35.565403565135116!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40002d9bb47e3831%3A0xc36a75f8f845014b!2sSulaymaniyah%2C%20Kurdistan%20Region%2C%20Iraq!5e0!3m2!1sen!2sus!4v1714571987541!5m2!1sen!2sus" 
+            className={styles.mapIframe}
+            allowFullScreen="" 
+            loading="lazy" 
+            referrerPolicy="no-referrer-when-downgrade"
+            title="Map of Sulaymaniyah, Iraq"
+          ></iframe>
         </div>
       </div>
     </section>

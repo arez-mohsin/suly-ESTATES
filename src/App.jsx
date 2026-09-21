@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { ScrollManager } from './components/ScrollManager';
+import { GlobalConsultationModal } from './components/GlobalConsultationModal';
 import { Home } from './pages/Home';
 import { Properties } from './pages/Properties';
 import { PropertyDetail } from './pages/PropertyDetail';
@@ -28,6 +29,7 @@ function App() {
           } />
         </Routes>
       </AnimatePresence>
+      <GlobalConsultationModal />
       <Footer />
     </>
   );

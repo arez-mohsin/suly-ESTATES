@@ -3,7 +3,7 @@ import styles from './OurApproach.module.css';
 
 export const OurApproach = () => {
   return (
-    <section className={styles.section}>
+    <section className={styles.section} id="approach" data-header-theme="light">
       <div className={styles.container}>
         <div className={styles.content}>
           <h2 className={`display-2 ${styles.title}`}>

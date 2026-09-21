@@ -1,6 +1,7 @@
 .detailPage {
   background-color: var(--color-near-black);
   min-height: 100vh;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .hero {
@@ -10,34 +11,21 @@
   display: flex;
   align-items: flex-end;
   padding: var(--space-large-desktop) var(--space-desktop);
-}
-
-.heroImage {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-}
-
-.heroOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to top, rgba(11,13,12,0.9) 0%, rgba(11,13,12,0.2) 50%, rgba(11,13,12,0.6) 100%);
-  z-index: 1;
+  overflow: hidden;
 }
 
 .heroContent {
   position: relative;
-  z-index: 2;
+  z-index: 20;
   width: 100%;
   max-width: var(--max-width-content);
   margin: 0 auto;
+  pointer-events: none;
+}
+
+/* Allow interaction with text elements if needed, but pass clicks through container */
+.heroContent > * {
+  pointer-events: auto;
 }
 
 .backLink {
@@ -99,33 +87,6 @@
   font-size: 1.25rem;
 }
 
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  margin-bottom: 80px;
-}
-
-.galleryItem {
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.galleryItem:first-child {
-  grid-column: 1 / -1;
-}
-
-.galleryItem img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform var(--motion-slow);
-}
-
-.galleryItem:hover img {
-  transform: scale(1.03);
-}
-
 .descriptionSection {
   margin-bottom: 80px;
 }
@@ -182,23 +143,33 @@
   margin-bottom: 32px;
 }
 
-.mapPlaceholder {
+.mapContainer {
+  width: 100%;
   height: 400px;
   background-color: var(--color-deep-charcoal);
   border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
   overflow: hidden;
+  border: 1px solid var(--color-border-dark);
+}
+
+.mapIframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
 }
 
 .mapDisclosure {
   position: absolute;
-  bottom: 16px;
-  right: 16px;
+  bottom: 12px;
+  right: 12px;
   font-size: 0.75rem;
-  opacity: 0.5;
+  opacity: 0.8;
+  background: rgba(0,0,0,0.6);
+  padding: 4px 8px;
+  border-radius: 2px;
+  pointer-events: none;
 }
 
 .sidebar {
@@ -262,10 +233,35 @@
   margin-top: 32px;
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1099px) and (min-width: 768px) {
+  /* Tablet in-flow */
   .contentGrid {
     grid-template-columns: 1fr;
     gap: 64px;
+  }
+  .sidebar {
+    position: static;
+  }
+  .stickyCard {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+  }
+  .stickyPrice {
+    margin-bottom: 0;
+  }
+  .inquireBtn, .viewingBtn {
+    width: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Mobile sticky bottom */
+  .contentGrid {
+    grid-template-columns: 1fr;
+    gap: 64px;
+    padding-bottom: 120px; /* Space for sticky bar */
   }
   .sidebar {
     position: static;
@@ -277,6 +273,7 @@
     width: 100%;
     z-index: 40;
     border-radius: 0;
+    border: none;
     border-top: 1px solid var(--color-border-dark);
     flex-direction: row;
     align-items: center;
@@ -285,18 +282,24 @@
     gap: 16px;
   }
   .stickyPrice {
-    display: none;
+    font-size: 1.5rem;
+    margin-bottom: 0;
+    flex: 1;
+  }
+  .viewingBtn {
+    display: none; /* Hide arrange viewing on phone to avoid clutter, user can select it in modal */
+  }
+  .inquireBtn {
+    width: auto;
+    padding: 12px 24px;
   }
   .hero {
     height: 70vh;
   }
-}
-
-@media (max-width: 767px) {
   .featuresSection {
     grid-template-columns: 1fr;
   }
-  .gallery {
-    grid-template-columns: 1fr;
+  .mapContainer {
+    height: 300px;
   }
 }

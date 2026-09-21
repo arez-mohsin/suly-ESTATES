@@ -1,6 +1,7 @@
 .hero {
   position: relative;
-  height: 100vh;
+  height: 100vh; /* fallback */
+  height: 100svh;
   min-height: 750px;
   display: flex;
   align-items: flex-end;
@@ -164,8 +165,13 @@
 @media (max-width: 767px) {
   .hero {
     padding: 0 var(--space-mobile) 60px;
-    height: 85vh;
-    min-height: 600px;
+    height: 100vh;
+    height: 100svh;
+    min-height: 550px;
+  }
+  
+  .title {
+    font-size: clamp(2.5rem, 10vw, 3.5rem);
   }
   
   .contentFooter {

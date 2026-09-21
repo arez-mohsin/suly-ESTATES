@@ -20,9 +20,9 @@ export const SignatureResidence = () => {
         <div className={styles.contentCol}>
           <p className={`eyebrow ${styles.eyebrow}`}>Signature Property</p>
           <h2 className={`display-2 ${styles.title}`}>
-            Goizha Residence<br />
-            Goizha, Sulaymaniyah
+            Goizha Residence
           </h2>
+          <p className={styles.location}>Goizha, Sulaymaniyah</p>
           <p className={styles.description}>
             A contemporary hillside residence overlooking Sulaymaniyah, combining private landscaped grounds, expansive living spaces and panoramic mountain and city views.
           </p>

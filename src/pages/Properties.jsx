@@ -1,29 +1,43 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { properties } from '../data/properties';
 import { PropertyCard } from '../components/PropertyCard';
+import { Reveal, TextReveal } from '../components/Motion';
+import styles from './Properties.module.css';
 
 export function Properties() {
   return (
-    <main style={{ paddingTop: '160px', paddingBottom: '100px', minHeight: '100vh', backgroundColor: 'var(--color-near-black)' }}>
-      <div style={{ maxWidth: '1520px', margin: '0 auto', padding: '0 var(--space-desktop)' }}>
-        <div style={{ marginBottom: '64px' }}>
-          <h1 className="display-2" style={{ marginBottom: '16px' }}>Exceptional Residences</h1>
-          <p style={{ color: 'var(--color-muted-text)', maxWidth: '600px', fontSize: '1.125rem' }}>
-            Explore our curated collection of architectural homes across Sulaymaniyah, 
-            each selected for its unique design and quality of life.
-          </p>
+    <motion.main 
+      className={styles.page} 
+      data-header-theme="dark"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <TextReveal 
+            as="h1" 
+            className={`display-2 ${styles.title}`} 
+            text="Exceptional Residences" 
+          />
+          <Reveal delay={0.2}>
+            <p className={styles.description}>
+              Explore our curated collection of architectural homes across Sulaymaniyah, 
+              each selected for its unique design and quality of life.
+            </p>
+          </Reveal>
         </div>
         
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
-          gap: '40px 24px' 
-        }}>
-          {properties.map(property => (
-            <PropertyCard key={property.id} property={property} />
+        <div className={styles.grid}>
+          {properties.map((property, index) => (
+            <Reveal key={property.id} delay={0.1 * (index % 4)}>
+              <PropertyCard property={property} />
+            </Reveal>
           ))}
         </div>
       </div>
-    </main>
+    </motion.main>
   );
 }

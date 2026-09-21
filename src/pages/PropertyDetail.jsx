@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { useState, Suspense } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { properties } from '../data/properties';
 import { Button } from '../components/Button';
 import { PropertyCard } from '../components/PropertyCard';
+import { PropertyCarousel } from '../components/PropertyCarousel';
+import { PhotoTour } from '../components/PhotoTour';
+import { Reveal, TextReveal } from '../components/Motion';
 import styles from './PropertyDetail.module.css';
+
+// Lazy load the lightbox wrapper to prevent plugin loading errors
+const PropertyLightbox = React.lazy(() => import('../components/PropertyLightbox'));
 
 export function PropertyDetail() {
   const { slug } = useParams();
   const property = properties.find(p => p.slug === slug);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const openLightbox = (index) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
 
   if (!property) {
     return (
@@ -25,110 +39,167 @@ export function PropertyDetail() {
   const relatedProperties = properties.filter(p => p.id !== property.id).slice(0, 3);
 
   return (
-    <main className={styles.detailPage}>
-      {/* Property Hero */}
+    <motion.main 
+      className={styles.detailPage}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+    >
       <section className={styles.hero} data-header-theme="transparent">
-        <img src={property.heroImage} alt={property.name} className={styles.heroImage} />
-        <div className={styles.heroOverlay} />
+        <PropertyCarousel images={property.gallery} onImageClick={openLightbox} />
+        
         <div className={styles.heroContent}>
-          <Link to="/properties" className={styles.backLink}>← Back to properties</Link>
-          <h1 className={`display-2 ${styles.title}`}>{property.name}</h1>
-          <div className={styles.heroMeta}>
-            <span>{property.neighborhood}, {property.city}</span>
-            <span className={styles.heroPrice}>{property.price}</span>
-          </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Link to="/properties" className={styles.backLink}>← Back to properties</Link>
+          </motion.div>
+          <TextReveal
+            as="h1"
+            className={`display-2 ${styles.title}`}
+            text={property.name}
+          />
+          <Reveal delay={0.2}>
+            <div className={styles.heroMeta}>
+              <span>{property.neighborhood}, {property.city}</span>
+              <span className={styles.heroPrice}>{property.price}</span>
+            </div>
+          </Reveal>
         </div>
       </section>
 
       <div className={styles.contentGrid}>
-        {/* Main Content */}
         <div className={styles.mainContent}>
           <section className={styles.section} data-header-theme="dark">
-            <div className={styles.factsGrid}>
-              <div className={styles.fact}>
-                <span className="eyebrow">Bedrooms</span>
-                <span className={styles.factValue}>{property.bedrooms}</span>
+            <Reveal>
+              <div className={styles.factsGrid}>
+                <div className={styles.fact}>
+                  <span className="eyebrow">Bedrooms</span>
+                  <span className={styles.factValue}>{property.bedrooms}</span>
+                </div>
+                <div className={styles.fact}>
+                  <span className="eyebrow">Bathrooms</span>
+                  <span className={styles.factValue}>{property.bathrooms}</span>
+                </div>
+                <div className={styles.fact}>
+                  <span className="eyebrow">Interior Area</span>
+                  <span className={styles.factValue}>{property.interiorArea} m²</span>
+                </div>
+                <div className={styles.fact}>
+                  <span className="eyebrow">Plot Area</span>
+                  <span className={styles.factValue}>{property.plotArea} m²</span>
+                </div>
+                <div className={styles.fact}>
+                  <span className="eyebrow">Property Type</span>
+                  <span className={styles.factValue}>{property.type}</span>
+                </div>
               </div>
-              <div className={styles.fact}>
-                <span className="eyebrow">Bathrooms</span>
-                <span className={styles.factValue}>{property.bathrooms}</span>
-              </div>
-              <div className={styles.fact}>
-                <span className="eyebrow">Interior Area</span>
-                <span className={styles.factValue}>{property.interiorArea} m²</span>
-              </div>
-              <div className={styles.fact}>
-                <span className="eyebrow">Plot Area</span>
-                <span className={styles.factValue}>{property.plotArea} m²</span>
-              </div>
-              <div className={styles.fact}>
-                <span className="eyebrow">Property Type</span>
-                <span className={styles.factValue}>{property.type}</span>
-              </div>
-            </div>
+            </Reveal>
           </section>
 
-          {/* Asymmetric Gallery */}
-          <section className={styles.gallery} data-header-theme="dark">
-            {property.gallery.map((img, i) => (
-              <div key={i} className={styles.galleryItem}>
-                <img src={img} alt={`Gallery ${i}`} loading="lazy" />
-              </div>
-            ))}
+          <section data-header-theme="dark">
+            <Reveal delay={0.1}>
+              <PhotoTour images={property.gallery} onImageClick={openLightbox} />
+            </Reveal>
           </section>
 
-          {/* Description */}
           <section className={styles.descriptionSection} data-header-theme="dark">
-            <h2 className="display-3">Overview</h2>
-            <div className={styles.descriptionText}>
-              {property.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
-            </div>
+            <Reveal>
+              <h2 className="display-3">Overview</h2>
+              <div className={styles.descriptionText}>
+                {property.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+              </div>
+            </Reveal>
           </section>
 
-          {/* Amenities & Highlights */}
           <section className={styles.featuresSection} data-header-theme="dark">
-            <div className={styles.featuresCol}>
-              <h3 className="eyebrow">Highlights</h3>
-              <ul className={styles.featureList}>
-                {property.highlights.map((h, i) => <li key={i}>{h}</li>)}
-              </ul>
-            </div>
-            <div className={styles.featuresCol}>
-              <h3 className="eyebrow">Amenities</h3>
-              <ul className={styles.featureList}>
-                {property.amenities.map((a, i) => <li key={i}>{a}</li>)}
-              </ul>
-            </div>
+            <Reveal>
+              <div className={styles.featuresCol}>
+                <h3 className="eyebrow">Highlights</h3>
+                <ul className={styles.featureList}>
+                  {property.highlights.map((h, i) => <li key={i}>{h}</li>)}
+                </ul>
+              </div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div className={styles.featuresCol}>
+                <h3 className="eyebrow">Amenities</h3>
+                <ul className={styles.featureList}>
+                  {property.amenities.map((a, i) => <li key={i}>{a}</li>)}
+                </ul>
+              </div>
+            </Reveal>
           </section>
 
-          {/* Location Map Placeholder */}
           <section className={styles.locationSection} data-header-theme="dark">
-            <h2 className="display-3">Approximate location</h2>
-            <p className={styles.locationMeta}>{property.approximateLocation}</p>
-            <div className={styles.mapPlaceholder}>
-              <span className={styles.mapDisclosure}>Approximate locations · Demo properties</span>
-            </div>
+            <Reveal>
+              <h2 className="display-3">Approximate area</h2>
+              <p className={styles.locationMeta}>{property.approximateLocation}</p>
+              <div className={styles.mapContainer}>
+                <iframe 
+                  src={property.mapUrl} 
+                  className={styles.mapIframe}
+                  allowFullScreen="" 
+                  loading="lazy" 
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title={`Map of ${property.neighborhood}`}
+                ></iframe>
+                <div className={styles.mapDisclosure}>Location shown at neighborhood level for this demonstration listing.</div>
+              </div>
+            </Reveal>
           </section>
         </div>
 
-        {/* Sticky Inquiry Sidebar */}
         <aside className={styles.sidebar}>
-          <div className={styles.stickyCard}>
+          <motion.div 
+            className={styles.stickyCard}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
             <h3 className={styles.stickyPrice}>{property.price}</h3>
-            <Button className={styles.inquireBtn}>Request details</Button>
-            <Button variant="transparent" className={styles.viewingBtn}>Arrange a viewing</Button>
-          </div>
+            <Button 
+              className={styles.inquireBtn}
+              onClick={() => window.dispatchEvent(new CustomEvent('open-consultation', { detail: { intent: 'details' } }))}
+            >
+              Request details
+            </Button>
+            <Button 
+              variant="transparent" 
+              className={styles.viewingBtn}
+              onClick={() => window.dispatchEvent(new CustomEvent('open-consultation', { detail: { intent: 'viewing' } }))}
+            >
+              Arrange a viewing
+            </Button>
+          </motion.div>
         </aside>
       </div>
       
       <section className={styles.related} data-header-theme="dark">
-        <h2 className="display-3" style={{marginBottom: '24px'}}>You may also like</h2>
-        <div className={styles.relatedGrid}>
-          {relatedProperties.map(p => (
-            <PropertyCard key={p.id} property={p} />
-          ))}
-        </div>
+        <Reveal>
+          <h2 className="display-3" style={{marginBottom: '24px'}}>You may also like</h2>
+          <div className={styles.relatedGrid}>
+            {relatedProperties.map(p => (
+              <PropertyCard key={p.id} property={p} />
+            ))}
+          </div>
+        </Reveal>
       </section>
-    </main>
+
+      {/* Lightbox Portal */}
+      {lightboxOpen && (
+        <Suspense fallback={null}>
+          <PropertyLightbox
+            open={lightboxOpen}
+            close={() => setLightboxOpen(false)}
+            index={lightboxIndex}
+            slides={property.gallery}
+          />
+        </Suspense>
+      )}
+    </motion.main>
   );
 }
