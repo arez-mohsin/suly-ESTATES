@@ -46,8 +46,8 @@ export const TextReveal = ({ text, delay = 0, className, as: Component = 'div' }
         <span key={i} style={{ display: 'block', overflow: 'hidden' }}>
           <motion.span
             style={{ display: 'block' }}
-            initial={{ y: '105%' }}
-            animate={isInView ? { y: 0 } : { y: '105%' }}
+            initial={{ y: '105%', opacity: 0.35 }}
+            animate={isInView ? { y: 0, opacity: 1 } : { y: '105%', opacity: 0.35 }}
             transition={{ duration: DURATION_EDITORIAL, delay: delay + (i * 0.07), ease: EASE_PREMIUM }}
           >
             {line}

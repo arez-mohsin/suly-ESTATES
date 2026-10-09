@@ -3,27 +3,32 @@ import { createPortal } from 'react-dom';
 import styles from './Modal.module.css';
 import { Icons } from './Icons';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSmoothScroll } from '../providers/SmoothScrollProvider';
 
 export const Modal = ({ isOpen, onClose, children, dataQa }) => {
   const dialogRef = useRef(null);
+  const { lenis } = useSmoothScroll();
 
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
 
     if (isOpen) {
+      if (lenis) lenis.stop();
       document.body.style.overflow = 'hidden';
       // showModal provides native backdrop, focus trap, and escape key handling
       dialog.showModal();
     } else {
+      if (lenis) lenis.start();
       document.body.style.overflow = '';
       dialog.close();
     }
 
     return () => {
+      if (lenis) lenis.start();
       document.body.style.overflow = '';
     };
-  }, [isOpen]);
+  }, [isOpen, lenis]);
 
   // Handle click on backdrop to close
   const handleBackdropClick = (e) => {
@@ -65,6 +70,7 @@ export const Modal = ({ isOpen, onClose, children, dataQa }) => {
             animate={{ opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.21, 0.47, 0.32, 0.98] } }}
             exit={{ opacity: 0, y: 12, transition: { duration: 0.2, ease: 'easeIn' } }}
             onClick={(e) => e.stopPropagation()} // Prevent bubbling to backdrop
+            data-lenis-prevent="true"
           >
             <button 
               className={styles.closeButton} 

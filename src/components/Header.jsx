@@ -4,12 +4,14 @@ import styles from './Header.module.css';
 import { MenuIcon, CloseIcon } from './Icons';
 import { Button } from './Button';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSmoothScroll } from '../providers/SmoothScrollProvider';
 
 export const Header = () => {
   const [headerTheme, setHeaderTheme] = useState('transparent');
   const [activeSection, setActiveSection] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const { lenis } = useSmoothScroll();
 
   useEffect(() => {
     let ticking = false;
@@ -64,6 +66,12 @@ export const Header = () => {
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     
+    if (menuOpen) {
+      if (lenis) lenis.stop();
+    } else {
+      if (lenis) lenis.start();
+    }
+    
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && menuOpen) {
         setMenuOpen(false);
@@ -76,8 +84,10 @@ export const Header = () => {
     
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
+      if (lenis) lenis.start();
+      document.body.style.overflow = '';
     };
-  }, [menuOpen]);
+  }, [menuOpen, lenis]);
 
   const navLinks = [
     { name: 'Properties', href: '/#properties', id: 'properties' },

@@ -9,6 +9,7 @@ import { PropertyCarousel } from '../components/PropertyCarousel';
 import { PhotoTour } from '../components/PhotoTour';
 import { Reveal, TextReveal, Stagger, StaggerItem, Divider } from '../components/Motion';
 import { PageTransition } from '../components/PageTransition';
+import { InteractiveMap } from '../components/InteractiveMap';
 import styles from './PropertyDetail.module.css';
 
 // Lazy load the lightbox wrapper to prevent plugin loading errors
@@ -41,6 +42,16 @@ export function PropertyDetail() {
     setLightboxOpen(true);
   };
 
+  const heroRef = React.useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start']
+  });
+  const { allowParallax } = usePerformanceProfile();
+  
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', allowParallax ? '15%' : '0%']);
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, allowParallax ? 0.5 : 1]);
+
   if (!property) {
     return (
       <main className={styles.notFound}>
@@ -55,16 +66,6 @@ export function PropertyDetail() {
   }
 
   const relatedProperties = properties.filter(p => p.id !== property.id).slice(0, 3);
-
-  const heroRef = React.useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start']
-  });
-  const { allowParallax } = usePerformanceProfile();
-  
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', allowParallax ? '15%' : '0%']);
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, allowParallax ? 0.5 : 1]);
 
   return (
     <PageTransition className={styles.detailPage}>
@@ -170,15 +171,12 @@ export function PropertyDetail() {
               <p className={styles.locationMeta}>{property.approximateLocation}</p>
               <Reveal delay={0.2}>
                 <div className={styles.mapContainer} data-qa="property-map-wrapper">
-                  <iframe
+                  <InteractiveMap
                     src={property.mapUrl}
-                    className={styles.mapIframe}
-                    allowFullScreen=""
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
                     title={`Map of ${property.neighborhood}`}
-                    data-qa="property-map-iframe"
-                  ></iframe>
+                    dataQaWrapper="property-map-wrapper"
+                    dataQaIframe="property-map-iframe"
+                  />
                 </div>
               </Reveal>
               <div className={styles.mapDisclosure} data-qa="property-map-disclosure">Location shown at neighborhood level for this demonstration listing.</div>

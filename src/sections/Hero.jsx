@@ -28,6 +28,7 @@ const slides = [
 
 export const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
   const shouldReduceMotion = useReducedMotion();
   const timerRef = useRef(null);
   
@@ -47,8 +48,10 @@ export const Hero = () => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
         clearTimeout(timerRef.current);
+        setIsPlaying(false);
       } else {
         startTimer();
+        setIsPlaying(true);
       }
     };
 
@@ -241,13 +244,9 @@ export const Hero = () => {
                   {reduceMotion ? (
                     <div className={styles.activeIndicatorStatic} />
                   ) : (
-                    <motion.div 
+                    <div 
                       key={`progress-${currentSlide}`}
-                      className={styles.activeIndicatorProgress}
-                      initial={{ scaleX: 0 }}
-                      animate={{ scaleX: 1 }}
-                      transition={{ duration: 5.5, ease: "linear" }}
-                      style={{ transformOrigin: "left" }}
+                      className={`${styles.activeIndicatorProgress} ${!isPlaying ? styles.paused : ''}`}
                     />
                   )}
                 </div>
