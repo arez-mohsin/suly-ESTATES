@@ -2,15 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Neighborhoods.module.css';
 import { locations } from '../data/locations';
-import { Reveal, Stagger, StaggerItem, ImageReveal } from '../components/Motion';
+import { Reveal, Stagger, StaggerItem, ImageReveal, TextReveal } from '../components/Motion';
 
 export const Neighborhoods = () => {
   return (
     <section className={styles.section} id="neighborhoods" data-header-theme="dark">
       <header className={styles.header}>
-        <Reveal>
-          <h2 className={`display-3 ${styles.title}`}>Neighborhoods with character</h2>
-        </Reveal>
+        <TextReveal as="h2" text="Neighborhoods with character" className={`display-3 ${styles.title}`} />
         <Reveal delay={0.1}>
           <p className={styles.description}>
             From established residential districts to hillside addresses, discover some of Sulaymaniyah's most distinctive settings.

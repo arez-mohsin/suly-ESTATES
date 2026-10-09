@@ -1,12 +1,13 @@
 import React, { useState, Suspense } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { usePerformanceProfile } from '../hooks/usePerformanceProfile';
 import { properties } from '../data/properties';
 import { Button } from '../components/Button';
 import { PropertyCard } from '../components/PropertyCard';
 import { PropertyCarousel } from '../components/PropertyCarousel';
 import { PhotoTour } from '../components/PhotoTour';
-import { Reveal, TextReveal, Stagger, StaggerItem } from '../components/Motion';
+import { Reveal, TextReveal, Stagger, StaggerItem, Divider } from '../components/Motion';
 import { PageTransition } from '../components/PageTransition';
 import styles from './PropertyDetail.module.css';
 
@@ -55,10 +56,22 @@ export function PropertyDetail() {
 
   const relatedProperties = properties.filter(p => p.id !== property.id).slice(0, 3);
 
+  const heroRef = React.useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start']
+  });
+  const { allowParallax } = usePerformanceProfile();
+  
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', allowParallax ? '15%' : '0%']);
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, allowParallax ? 0.5 : 1]);
+
   return (
     <PageTransition className={styles.detailPage}>
-      <section className={styles.hero} data-header-theme="transparent">
-        <PropertyCarousel images={property.gallery} onImageClick={openLightbox} />
+      <section ref={heroRef} className={styles.hero} data-header-theme="transparent">
+        <motion.div style={{ y, opacity, width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}>
+          <PropertyCarousel images={property.gallery} onImageClick={openLightbox} />
+        </motion.div>
         
         <div className={styles.heroContent}>
           <motion.div
@@ -116,20 +129,16 @@ export function PropertyDetail() {
           </section>
 
           <section className={styles.descriptionSection} data-header-theme="dark">
-            <Stagger staggerDelay={0.08}>
-              <StaggerItem y={14}>
-                <h2 className="display-3">Overview</h2>
-              </StaggerItem>
-              <StaggerItem y={14}>
-                <div className={styles.descriptionText}>
-                  {property.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
-                </div>
-              </StaggerItem>
-            </Stagger>
+            <TextReveal as="h2" text="Overview" className="display-3" />
+            <Reveal y={14} delay={0.1}>
+              <div className={styles.descriptionText}>
+                {property.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+              </div>
+            </Reveal>
           </section>
 
           <section className={styles.featuresSection} data-header-theme="dark">
-            <Stagger staggerDelay={0.06}>
+            <Stagger staggerDelay={0.03}>
               <div className={styles.featuresCol}>
                 <StaggerItem y={12}>
                   <h3 className="eyebrow">Highlights</h3>
@@ -141,7 +150,7 @@ export function PropertyDetail() {
                 </ul>
               </div>
             </Stagger>
-            <Stagger staggerDelay={0.06} delay={0.1}>
+            <Stagger staggerDelay={0.03} delay={0.1}>
               <div className={styles.featuresCol}>
                 <StaggerItem y={12}>
                   <h3 className="eyebrow">Amenities</h3>
@@ -206,13 +215,12 @@ export function PropertyDetail() {
       </div>
       
       <section className={styles.related} data-header-theme="dark">
+        <Divider className={styles.relatedDivider} />
+        <TextReveal as="h2" text="You may also like" className="display-3" style={{marginBottom: '24px'}} />
         <Stagger staggerDelay={0.06} delay={0.1}>
-          <StaggerItem y={16}>
-            <h2 className="display-3" style={{marginBottom: '24px'}}>You may also like</h2>
-          </StaggerItem>
           <div className={styles.relatedGrid}>
             {relatedProperties.map(p => (
-              <StaggerItem key={p.id} y={16}>
+              <StaggerItem key={p.id} y={14}>
                 <PropertyCard property={p} />
               </StaggerItem>
             ))}

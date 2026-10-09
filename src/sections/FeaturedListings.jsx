@@ -4,7 +4,7 @@ import styles from './FeaturedListings.module.css';
 import { PropertyCard } from '../components/PropertyCard';
 import { Button } from '../components/Button';
 import { properties } from '../data/properties';
-import { Reveal, Stagger, StaggerItem } from '../components/Motion';
+import { Reveal, Stagger, StaggerItem, TextReveal } from '../components/Motion';
 
 export const FeaturedListings = () => {
   return (
@@ -14,9 +14,7 @@ export const FeaturedListings = () => {
           <Reveal y={16}>
             <p className="eyebrow">Curated for a remarkable life</p>
           </Reveal>
-          <Reveal delay={0.1} y={16}>
-            <h2 className={`display-3 ${styles.title}`}>Featured Listings</h2>
-          </Reveal>
+          <TextReveal as="h2" text="Featured Listings" delay={0.1} className={`display-3 ${styles.title}`} />
         </div>
         <Reveal delay={0.2} y={10}>
           <Button as={Link} to="/properties" variant="link">View all properties</Button>

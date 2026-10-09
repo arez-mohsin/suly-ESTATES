@@ -2,6 +2,14 @@
   padding: 120px var(--space-desktop);
   max-width: var(--max-width-content);
   margin: 0 auto;
+  position: relative;
+}
+
+.divider {
+  position: absolute;
+  top: 0;
+  left: var(--space-desktop);
+  width: calc(100% - var(--space-desktop) * 2) !important;
 }
 
 .container {

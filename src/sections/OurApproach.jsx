@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import styles from './OurApproach.module.css';
-import { Reveal, TextReveal, ImageReveal } from '../components/Motion';
+import { Reveal, TextReveal, EditorialImageReveal } from '../components/Motion';
 import { usePerformanceProfile } from '../hooks/usePerformanceProfile';
 
 const EASE_PREMIUM = [0.21, 0.47, 0.32, 0.98];
@@ -39,7 +39,7 @@ export const OurApproach = () => {
         </div>
         
         <div className={styles.imageWrapper}>
-          <ImageReveal scale={1.025} duration={1.0}>
+          <EditorialImageReveal theme="light">
             <img 
               src="/images/approach.jpg" 
               alt="Beautifully composed premium interior in a Sulaymaniyah residence" 
@@ -47,7 +47,7 @@ export const OurApproach = () => {
               decoding="async"
               className={styles.image}
             />
-          </ImageReveal>
+          </EditorialImageReveal>
         </div>
       </div>
     </section>

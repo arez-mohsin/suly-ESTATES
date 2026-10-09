@@ -1,23 +1,18 @@
 import React from 'react';
 import styles from './PrivateConsultation.module.css';
 import { Button } from '../components/Button';
-import { Stagger, StaggerItem, ImageReveal } from '../components/Motion';
+import { Stagger, StaggerItem, EditorialImageReveal, TextReveal } from '../components/Motion';
 
 export const PrivateConsultation = () => {
   return (
     <section className={styles.section} id="contact" data-header-theme="dark">
       <div className={styles.container}>
-        <Stagger className={styles.content} staggerDelay={0.08}>
+        <Stagger className={styles.content} staggerDelay={0.06}>
           <StaggerItem>
             <p className={`eyebrow ${styles.eyebrow}`}>Let's start a conversation</p>
           </StaggerItem>
           
-          <StaggerItem y={16}>
-            <h2 className={`display-2 ${styles.title}`}>
-              Personal advice.<br />
-              Extraordinary opportunities.
-            </h2>
-          </StaggerItem>
+          <TextReveal as="h2" text={"Personal advice.\nExtraordinary opportunities."} className={`display-2 ${styles.title}`} />
           
           <StaggerItem y={12}>
             <p className={styles.description}>
@@ -33,7 +28,7 @@ export const PrivateConsultation = () => {
         </Stagger>
 
         <div className={styles.imageWrapper}>
-          <ImageReveal scale={1.03} delay={0.1} duration={1.0}>
+          <EditorialImageReveal delay={0.1} theme="dark">
             <img 
               src="/images/consultation-bg.jpg" 
               alt="Private consultation space" 
@@ -41,7 +36,7 @@ export const PrivateConsultation = () => {
               decoding="async"
               className={styles.image}
             />
-          </ImageReveal>
+          </EditorialImageReveal>
         </div>
       </div>
     </section>

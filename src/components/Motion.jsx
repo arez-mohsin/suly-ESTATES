@@ -2,9 +2,9 @@ import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { usePerformanceProfile } from '../hooks/usePerformanceProfile';
 
-const EASE_PREMIUM = [0.21, 0.47, 0.32, 0.98];
+import { EASE_PREMIUM, DURATION_REVEAL, DURATION_EDITORIAL, DURATION_IMAGE } from '../motion/tokens';
 
-export const Reveal = ({ children, delay = 0, y = 16, duration = 0.7, className }) => {
+export const Reveal = ({ children, delay = 0, y = 16, duration = DURATION_REVEAL, className }) => {
   const { reduceMotion, constrainedDevice } = usePerformanceProfile();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
@@ -38,22 +38,23 @@ export const TextReveal = ({ text, delay = 0, className, as: Component = 'div' }
   }
 
   const lines = text.split('\n');
+  const MotionComponent = typeof Component === 'string' ? motion[Component] : motion.div;
 
   return (
-    <Component ref={ref} className={className}>
+    <MotionComponent ref={ref} className={className}>
       {lines.map((line, i) => (
         <span key={i} style={{ display: 'block', overflow: 'hidden' }}>
           <motion.span
             style={{ display: 'block' }}
-            initial={{ y: '100%' }}
-            animate={isInView ? { y: 0 } : { y: '100%' }}
-            transition={{ duration: 0.8, delay: delay + (i * 0.08), ease: EASE_PREMIUM }}
+            initial={{ y: '105%' }}
+            animate={isInView ? { y: 0 } : { y: '105%' }}
+            transition={{ duration: DURATION_EDITORIAL, delay: delay + (i * 0.07), ease: EASE_PREMIUM }}
           >
             {line}
           </motion.span>
         </span>
       ))}
-    </Component>
+    </MotionComponent>
   );
 };
 
@@ -66,25 +67,26 @@ export const Stagger = ({ children, staggerDelay = 0.06, delay = 0, className, a
     return <Component className={className}>{children}</Component>;
   }
 
+  const MotionComponent = typeof Component === 'string' ? motion[Component] : motion.div;
+
   return (
-    <Component ref={ref} className={className}>
-      <motion.div
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        variants={{
-          hidden: {},
-          visible: {
-            transition: {
-              staggerChildren: staggerDelay,
-              delayChildren: delay
-            }
+    <MotionComponent
+      ref={ref}
+      className={className}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={{
+        hidden: {},
+        visible: {
+          transition: {
+            staggerChildren: staggerDelay,
+            delayChildren: delay
           }
-        }}
-        style={{ display: 'contents' }}
-      >
-        {children}
-      </motion.div>
-    </Component>
+        }
+      }}
+    >
+      {children}
+    </MotionComponent>
   );
 };
 
@@ -96,22 +98,22 @@ export const StaggerItem = ({ children, y = 14, className, as: Component = 'div'
   }
 
   const initialY = constrainedDevice ? 8 : y;
+  const MotionComponent = typeof Component === 'string' ? motion[Component] : motion.div;
 
   return (
-    <motion.div
+    <MotionComponent
       variants={{
         hidden: { opacity: 0, y: initialY },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE_PREMIUM } }
+        visible: { opacity: 1, y: 0, transition: { duration: DURATION_REVEAL, ease: EASE_PREMIUM } }
       }}
       className={className}
-      as={Component}
     >
       {children}
-    </motion.div>
+    </MotionComponent>
   );
 };
 
-export const ImageReveal = ({ children, delay = 0, scale = 1.03, duration = 1.0, className }) => {
+export const ImageReveal = ({ children, delay = 0, scale = 1.03, duration = DURATION_IMAGE, className }) => {
   const { reduceMotion, constrainedDevice } = usePerformanceProfile();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
@@ -133,5 +135,67 @@ export const ImageReveal = ({ children, delay = 0, scale = 1.03, duration = 1.0,
     >
       {children}
     </motion.div>
+  );
+};
+
+export const EditorialImageReveal = ({ children, delay = 0, theme = 'dark', className }) => {
+  const { reduceMotion, constrainedDevice } = usePerformanceProfile();
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
+
+  if (reduceMotion || constrainedDevice) {
+    return <ImageReveal delay={delay} className={className}>{children}</ImageReveal>;
+  }
+
+  const coverColor = theme === 'light' ? 'var(--color-warm-ivory)' : 'var(--color-deep-charcoal)';
+
+  return (
+    <div ref={ref} className={className} style={{ position: 'relative', overflow: 'hidden' }}>
+      <motion.div
+        initial={{ scaleX: 1 }}
+        animate={isInView ? { scaleX: 0 } : { scaleX: 1 }}
+        transition={{ duration: DURATION_IMAGE, delay, ease: EASE_PREMIUM }}
+        style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: coverColor,
+          transformOrigin: 'right',
+          zIndex: 10
+        }}
+      />
+      <motion.div
+        initial={{ scale: 1.025, opacity: 0 }}
+        animate={isInView ? { scale: 1, opacity: 1 } : { scale: 1.025, opacity: 0 }}
+        transition={{ duration: DURATION_IMAGE, delay: delay + 0.1, ease: EASE_PREMIUM }}
+      >
+        {children}
+      </motion.div>
+    </div>
+  );
+};
+
+export const Divider = ({ className, delay = 0, duration = 0.8, color = 'var(--color-border-dark)' }) => {
+  const { reduceMotion } = usePerformanceProfile();
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
+
+  if (reduceMotion) {
+    return <div className={className} style={{ width: '100%', height: '1px', backgroundColor: color }} />;
+  }
+
+  return (
+    <div ref={ref} className={className} style={{ width: '100%', height: '1px', overflow: 'hidden' }}>
+      <motion.div
+        initial={{ scaleX: 0 }}
+        animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
+        transition={{ duration, delay, ease: EASE_PREMIUM }}
+        style={{
+          width: '100%',
+          height: '100%',
+          backgroundColor: color,
+          transformOrigin: 'left'
+        }}
+      />
+    </div>
   );
 };

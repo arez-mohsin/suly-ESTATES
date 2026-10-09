@@ -1,16 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import styles from './PropertyCard.module.css';
 import { Icons } from './Icons';
 import { ImageReveal } from './Motion';
 
+const MotionLink = motion.create ? motion.create(Link) : motion(Link);
+
 export const PropertyCard = ({ property }) => {
   return (
-    <Link
+    <MotionLink
       to={`/properties/${property.slug}`}
       className={styles.card}
       data-qa="property-card"
       data-qa-slug={property.slug}
+      whileTap={{ scale: 0.995, transition: { duration: 0.1 } }}
     >
       <div className={styles.imageWrapper}>
         <ImageReveal scale={1.025} duration={1.0} className={styles.imageRevealContainer}>
@@ -43,6 +47,6 @@ export const PropertyCard = ({ property }) => {
           <span className={styles.arrow}><Icons.ArrowRight /></span>
         </div>
       </div>
-    </Link>
+    </MotionLink>
   );
 };

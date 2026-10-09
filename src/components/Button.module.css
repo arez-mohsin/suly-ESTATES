@@ -21,6 +21,11 @@
   opacity: 0.7;
 }
 
+.button:active {
+  transform: scale(0.985);
+  transition: transform 100ms ease;
+}
+
 .button svg {
   transition: transform var(--motion-fast);
 }

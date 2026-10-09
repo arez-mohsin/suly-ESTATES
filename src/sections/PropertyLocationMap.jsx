@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './PropertyLocationMap.module.css';
-import { Stagger, StaggerItem, ImageReveal } from '../components/Motion';
+import { Stagger, StaggerItem, Reveal, TextReveal } from '../components/Motion';
 
 export const PropertyLocationMap = () => {
   return (
@@ -10,16 +10,14 @@ export const PropertyLocationMap = () => {
           <StaggerItem>
             <p className="eyebrow">Location</p>
           </StaggerItem>
-          <StaggerItem y={16}>
-            <h2 className="display-3">Based in Sulaymaniyah</h2>
-          </StaggerItem>
+          <TextReveal as="h2" text="Based in Sulaymaniyah" className="display-3" />
           <StaggerItem y={12}>
             <p className={styles.description}>
               A focused collection of residential property across Sulaymaniyah and its surrounding neighborhoods.
             </p>
           </StaggerItem>
         </Stagger>
-        <ImageReveal scale={0.995} duration={0.7} delay={0.2} className={styles.mapWrapper}>
+        <Reveal y={8} delay={0.2} className={styles.mapWrapper}>
           <div data-qa="homepage-map-wrapper" style={{ width: '100%', height: '100%' }}>
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d103328.71804598914!2d45.36780373024844!3d35.565403565135116!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40002d9bb47e3831%3A0xc36a75f8f845014b!2sSulaymaniyah%2C%20Kurdistan%20Region%2C%20Iraq!5e0!3m2!1sen!2sus!4v1714571987541!5m2!1sen!2sus"
@@ -31,7 +29,7 @@ export const PropertyLocationMap = () => {
               data-qa="homepage-map-iframe"
             ></iframe>
           </div>
-        </ImageReveal>
+        </Reveal>
       </div>
     </section>
   );

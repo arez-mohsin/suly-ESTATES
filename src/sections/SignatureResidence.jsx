@@ -2,14 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './SignatureResidence.module.css';
 import { Button } from '../components/Button';
-import { ImageReveal, Stagger, StaggerItem } from '../components/Motion';
+import { EditorialImageReveal, Stagger, StaggerItem, TextReveal, Divider } from '../components/Motion';
 
 export const SignatureResidence = () => {
   return (
     <section className={styles.section} data-header-theme="dark">
+      <Divider className={styles.divider} />
       <div className={styles.container}>
         <div className={styles.imageWrapper}>
-          <ImageReveal scale={1.035} duration={1.0}>
+          <EditorialImageReveal theme="dark">
             <img 
               src="/images/goizha-living.jpg" 
               alt="Goizha Residence overlooking Sulaymaniyah" 
@@ -17,18 +18,14 @@ export const SignatureResidence = () => {
               decoding="async"
               className={styles.image}
             />
-          </ImageReveal>
+          </EditorialImageReveal>
         </div>
         
-        <Stagger className={styles.content} staggerDelay={0.07} delay={0.1}>
+        <Stagger className={styles.content} staggerDelay={0.06} delay={0.1}>
           <StaggerItem>
             <p className={`eyebrow ${styles.eyebrow}`}>Signature Property</p>
           </StaggerItem>
-          <StaggerItem y={16}>
-            <h2 className={`display-2 ${styles.title}`}>
-              Goizha Residence
-            </h2>
-          </StaggerItem>
+          <TextReveal as="h2" text="Goizha Residence" className={`display-2 ${styles.title}`} />
           <StaggerItem y={12}>
             <p className={styles.location}>Goizha, Sulaymaniyah</p>
           </StaggerItem>

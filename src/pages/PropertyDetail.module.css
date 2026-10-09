@@ -203,7 +203,14 @@
   padding: var(--space-desktop);
   max-width: var(--max-width-content);
   margin: 0 auto;
-  border-top: 1px solid var(--color-border-dark);
+  position: relative;
+}
+
+.relatedDivider {
+  position: absolute;
+  top: 0;
+  left: var(--space-desktop);
+  width: calc(100% - var(--space-desktop) * 2) !important;
 }
 
 .relatedGrid {

@@ -111,21 +111,34 @@ export const Hero = () => {
     }
   };
 
-  const { scrollY } = useScroll();
-  const { reduceMotion, constrainedDevice, saveData } = usePerformanceProfile();
-  
-  // Parallax is allowed only if device is not constrained and not on mobile (assumed > 768px innerWidth roughly, 
-  // but framer-motion handles transform elegantly. We'll use a simple approach: map scrollY to transform but only apply if allowed)
-  const allowParallax = !reduceMotion && !constrainedDevice && !saveData && typeof window !== 'undefined' && window.innerWidth > 768;
+  const heroRef = useRef(null);
 
-  const bgY = useTransform(scrollY, [0, 800], ['0%', allowParallax ? '-3%' : '0%']);
-  const contentY = useTransform(scrollY, [0, 800], ['0px', allowParallax ? '16px' : '0px']);
-  const contentOpacity = useTransform(scrollY, [0, 600], [1, allowParallax ? 0.88 : 1]);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start']
+  });
+
+  const { reduceMotion, constrainedDevice, saveData } = usePerformanceProfile();
+  const [isDesktopWide, setIsDesktopWide] = useState(true);
+
+  useEffect(() => {
+    const checkWidth = () => setIsDesktopWide(window.innerWidth > 768);
+    checkWidth();
+    window.addEventListener('resize', checkWidth);
+    return () => window.removeEventListener('resize', checkWidth);
+  }, []);
+
+  const allowParallax = !reduceMotion && !constrainedDevice && !saveData && isDesktopWide;
+
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', allowParallax ? '-2.5%' : '0%']);
+  const contentY = useTransform(scrollYProgress, [0, 1], ['0px', allowParallax ? '14px' : '0px']);
+  const contentOpacity = useTransform(scrollYProgress, [0, 1], [1, allowParallax ? 0.9 : 1]);
 
   const EASE_PREMIUM = [0.21, 0.47, 0.32, 0.98];
 
   return (
     <section 
+      ref={heroRef}
       className={styles.hero}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
@@ -222,9 +235,22 @@ export const Hero = () => {
               onClick={() => handleManualSelect(index)}
               data-qa={`hero-slide-control-${index + 1}`}
             >
-              0{index + 1}
+              <span className={styles.slideNumber}>0{index + 1}</span>
               {currentSlide === index && (
-                <motion.div layoutId="activeSlideIndicator" className={styles.activeIndicator} />
+                <div className={styles.activeIndicatorContainer}>
+                  {reduceMotion ? (
+                    <div className={styles.activeIndicatorStatic} />
+                  ) : (
+                    <motion.div 
+                      key={`progress-${currentSlide}`}
+                      className={styles.activeIndicatorProgress}
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ duration: 5.5, ease: "linear" }}
+                      style={{ transformOrigin: "left" }}
+                    />
+                  )}
+                </div>
               )}
             </button>
             {index < slides.length - 1 && <span className={styles.sliderDash} aria-hidden="true">—</span>}
