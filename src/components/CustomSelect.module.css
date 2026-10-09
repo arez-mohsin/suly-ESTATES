@@ -1,0 +1,115 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.label {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-near-black);
+  opacity: 0.8;
+}
+
+.trigger {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-near-black);
+  background-color: transparent;
+  border: 1px solid var(--color-border-dark);
+  border-radius: 2px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.trigger:hover {
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+.trigger:focus-visible {
+  border-color: var(--color-near-black);
+  outline: none;
+}
+
+.trigger[data-state="open"] {
+  border-color: var(--color-near-black);
+}
+
+.trigger[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  color: var(--color-near-black);
+  opacity: 0.6;
+}
+
+.trigger[data-state="open"] .icon {
+  transform: rotate(180deg);
+}
+
+.content {
+  overflow: hidden;
+  background-color: var(--color-warm-ivory);
+  border: 1px solid var(--color-border-dark);
+  border-radius: 2px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+  width: var(--radix-select-trigger-width);
+  max-height: 280px;
+}
+
+.viewport {
+  padding: 4px;
+}
+
+.item {
+  all: unset;
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px; /* Touch target */
+  padding: 0 32px 0 12px;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--color-near-black);
+  border-radius: 2px;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.item[data-highlighted] {
+  background-color: var(--color-soft-stone);
+  outline: none;
+}
+
+.itemIndicator {
+  position: absolute;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 767px) {
+  .trigger {
+    height: 50px;
+  }
+}

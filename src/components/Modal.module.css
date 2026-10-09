@@ -16,10 +16,12 @@
 .content {
   background-color: var(--color-warm-ivory);
   color: var(--color-near-black);
-  padding: 64px 48px;
-  max-width: 600px;
-  width: 100%;
+  width: min(820px, calc(100vw - 48px));
+  max-height: 90dvh;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Internal elements will handle scrolling */
 }
 
 .closeButton {
@@ -35,10 +37,25 @@
   align-items: center;
   justify-content: center;
   transition: transform var(--motion-fast);
+  z-index: 20;
 }
 
 .closeButton:hover {
   transform: scale(1.1);
+}
+
+.portalContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.portalContainer > * {
+  pointer-events: auto;
 }
 
 @media (max-width: 767px) {
@@ -48,11 +65,13 @@
   }
   
   .content {
-    padding: 48px var(--space-mobile);
-    padding-bottom: calc(48px + env(safe-area-inset-bottom));
-    max-width: 100%;
     width: 100vw;
-    max-height: calc(100dvh - 40px);
-    overflow-y: auto;
+    max-height: calc(100dvh - 24px);
+    border-radius: 8px 8px 0 0; /* Optional slight rounding for bottom sheet feel */
+  }
+  
+  .closeButton {
+    top: 16px;
+    right: 16px;
   }
 }

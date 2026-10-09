@@ -40,59 +40,6 @@
   object-fit: cover;
 }
 
-/* Modal form styles */
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.formTitle {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  margin-bottom: 8px;
-}
-
-.formDesc {
-  color: var(--color-muted-brown);
-  margin-bottom: 24px;
-}
-
-.fieldGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.fieldGroup label {
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.fieldGroup input,
-.fieldGroup select,
-.fieldGroup textarea {
-  padding: 12px;
-  border: 1px solid var(--color-border-light);
-  background: transparent;
-  font-family: inherit;
-  font-size: 1rem;
-}
-
-.fieldGroup textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-.successState {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 40px 0;
-  gap: 16px;
-}
 
 @media (max-width: 1024px) {
   .section {

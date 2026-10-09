@@ -1,0 +1,163 @@
+.modalShell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  flex-shrink: 0;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--color-border-light);
+  margin-bottom: 32px;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: var(--color-muted-brown);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.formTitle {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  color: var(--color-near-black);
+  margin-bottom: 8px;
+  line-height: 1.1;
+  white-space: pre-line;
+}
+
+.formDesc {
+  color: var(--color-muted-brown);
+  font-size: 1rem;
+}
+
+.scrollArea {
+  flex-grow: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-bottom: 24px;
+  /* Ensure padding doesn't cause horizontal scroll */
+  box-sizing: border-box;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 24px;
+  row-gap: 24px;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fieldGroup label {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-near-black);
+  opacity: 0.8;
+}
+
+.fieldGroup input,
+.fieldGroup textarea {
+  width: 100%;
+  padding: 0 16px;
+  border: 1px solid var(--color-border-dark);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-near-black);
+  border-radius: 2px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.fieldGroup input {
+  height: 48px;
+}
+
+.fieldGroup textarea {
+  padding: 16px;
+  resize: vertical;
+  min-height: 120px;
+}
+
+.fieldGroup input:focus-visible,
+.fieldGroup textarea:focus-visible {
+  border-color: var(--color-near-black);
+  outline: none;
+}
+
+.footer {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 16px;
+}
+
+.submitBtn {
+  min-width: 240px;
+}
+
+.successState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 64px 24px;
+  gap: 16px;
+  height: 100%;
+}
+
+.successState .formTitle {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 767px) {
+  .header {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+  }
+  
+  .formTitle {
+    font-size: 1.875rem;
+  }
+  
+  .form {
+    grid-template-columns: 1fr;
+    row-gap: 20px;
+  }
+
+  .fullWidth {
+    grid-column: 1 / -1;
+  }
+  
+  .fieldGroup input {
+    height: 50px;
+  }
+
+  .fieldGroup textarea {
+    min-height: 100px;
+    resize: none;
+  }
+
+  .footer {
+    justify-content: stretch;
+  }
+
+  .submitBtn {
+    width: 100%;
+  }
+}

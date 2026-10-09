@@ -1,12 +1,18 @@
-import React, { useEffect, useRef } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import React, { useEffect, useRef, useState, createContext, useContext } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './Modal.module.css';
 import { Icons } from './Icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSmoothScroll } from '../providers/SmoothScrollProvider';
 
+const ModalPortalContext = createContext(null);
+export const useModalPortal = () => useContext(ModalPortalContext);
+
 export const Modal = ({ isOpen, onClose, children, dataQa }) => {
   const dialogRef = useRef(null);
+  const portalRef = useRef(null);
+  const [portalElement, setPortalElement] = useState(null);
   const { lenis } = useSmoothScroll();
 
   useEffect(() => {
@@ -29,6 +35,12 @@ export const Modal = ({ isOpen, onClose, children, dataQa }) => {
       document.body.style.overflow = '';
     };
   }, [isOpen, lenis]);
+
+  useEffect(() => {
+    if (portalRef.current) {
+      setPortalElement(portalRef.current);
+    }
+  }, [isOpen]);
 
   // Handle click on backdrop to close
   const handleBackdropClick = (e) => {
@@ -80,7 +92,10 @@ export const Modal = ({ isOpen, onClose, children, dataQa }) => {
             >
               <Icons.Close />
             </button>
-            {children}
+            <ModalPortalContext.Provider value={portalElement}>
+              {children}
+            </ModalPortalContext.Provider>
+            <div ref={portalRef} className={styles.portalContainer} />
           </motion.div>
         )}
       </AnimatePresence>
