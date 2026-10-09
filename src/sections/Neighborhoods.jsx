@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './Neighborhoods.module.css';
 import { locations } from '../data/locations';
 
@@ -14,7 +15,7 @@ export const Neighborhoods = () => {
       
       <div className={styles.grid}>
         {locations.map(location => (
-          <a key={location.id} href="#locations" className={styles.card}>
+          <Link key={location.id} to="/#locations" className={styles.card}>
             <img 
               src={location.image} 
               alt={location.imageAlt} 
@@ -26,7 +27,7 @@ export const Neighborhoods = () => {
               <h3 className={styles.name}>{location.name}</h3>
               <p className={styles.desc}>{location.description}</p>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </section>

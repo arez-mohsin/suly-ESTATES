@@ -60,10 +60,25 @@ export const GlobalConsultationModal = () => {
             <label htmlFor="modal-email">Email</label>
             <input type="email" id="modal-email" required />
           </div>
+
+          <div className={styles.fieldGroup}>
+            <label htmlFor="modal-phone">Phone</label>
+            <input type="tel" id="modal-phone" required />
+          </div>
+
+          <div className={styles.fieldGroup}>
+            <label htmlFor="modal-preferred-contact">Preferred contact</label>
+            <select id="modal-preferred-contact" required defaultValue="whatsapp">
+              <option value="whatsapp">WhatsApp</option>
+              <option value="phone">Phone</option>
+              <option value="email">Email</option>
+            </select>
+          </div>
           
           <div className={styles.fieldGroup}>
             <label htmlFor="modal-interest">Interested In</label>
-            <select id="modal-interest" required defaultValue={intent === 'viewing' ? 'viewing' : 'buy'}>
+            <select id="modal-interest" required defaultValue={intent === 'viewing' ? 'viewing' : (intent === 'details' ? 'details' : 'buy')}>
+              <option value="details">Property details</option>
               <option value="buy">Buying a property</option>
               <option value="sell">Selling a property</option>
               <option value="viewing">Arranging a viewing</option>

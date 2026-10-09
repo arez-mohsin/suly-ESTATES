@@ -208,7 +208,7 @@
 
 .relatedGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
   margin-top: 40px;
 }
@@ -274,6 +274,12 @@
     padding: 16px var(--space-mobile);
     padding-bottom: calc(16px + env(safe-area-inset-bottom));
     gap: 16px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  .hiddenMobile {
+    transform: translateY(110%);
+    opacity: 0;
+    pointer-events: none;
   }
   .stickyPrice {
     font-size: 1.5rem;
@@ -295,5 +301,8 @@
   }
   .mapContainer {
     height: 300px;
+  }
+  .relatedGrid {
+    grid-template-columns: 1fr;
   }
 }

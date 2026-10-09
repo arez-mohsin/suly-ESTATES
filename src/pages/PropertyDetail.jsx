@@ -17,6 +17,22 @@ export function PropertyDetail() {
   const property = properties.find(p => p.slug === slug);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
+
+  React.useEffect(() => {
+    const footer = document.querySelector('footer');
+    if (!footer) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsFooterVisible(entry.isIntersecting);
+      },
+      { rootMargin: '0px', threshold: 0.01 }
+    );
+
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
 
   const openLightbox = (index) => {
     setLightboxIndex(index);
@@ -156,7 +172,7 @@ export function PropertyDetail() {
 
         <aside className={styles.sidebar}>
           <motion.div
-            className={styles.stickyCard}
+            className={`${styles.stickyCard} ${isFooterVisible ? styles.hiddenMobile : ''}`}
             data-qa="property-sticky-inquiry-bar"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

@@ -15,7 +15,7 @@ export const PrivateConsultation = () => {
           </h2>
           
           <p className={styles.description}>
-            Whether you're looking to buy, sell, or simply explore what's possible in Sulaymaniyah, our team is here to help—with discretion and insight.
+            Contact us to discuss acquiring or selling a property in Sulaymaniyah. We can provide further details on current listings or arrange a private viewing.
           </p>
           
           <Button variant="outline" onClick={() => window.dispatchEvent(new Event('open-consultation'))}>

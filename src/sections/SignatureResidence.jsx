@@ -7,9 +7,9 @@ export const SignatureResidence = () => {
   return (
     <section className={styles.section} data-header-theme="dark">
       <div className={styles.container}>
-        <div className={styles.imageCol}>
+        <div className={styles.imageWrapper}>
           <img 
-            src="/images/goizha-hero.jpg" 
+            src="/images/goizha-living.jpg" 
             alt="Goizha Residence overlooking Sulaymaniyah" 
             loading="lazy"
             decoding="async"
@@ -17,7 +17,7 @@ export const SignatureResidence = () => {
           />
         </div>
         
-        <div className={styles.contentCol}>
+        <div className={styles.content}>
           <p className={`eyebrow ${styles.eyebrow}`}>Signature Property</p>
           <h2 className={`display-2 ${styles.title}`}>
             Goizha Residence

@@ -129,18 +129,43 @@
   pointer-events: auto;
 }
 
+@media (hover: none) {
+  .affordance {
+    opacity: 1;
+    pointer-events: auto;
+    top: auto;
+    bottom: 40px;
+    left: var(--space-desktop);
+    transform: none;
+  }
+}
+
 @media (max-width: 1023px) {
   .controls {
-    right: var(--space-mobile);
+    right: var(--space-tablet); /* Assuming space-tablet instead of space-mobile for 1024-768 */
+  }
+}
+
+@media (hover: none) and (max-width: 1023px) {
+  .affordance {
+    left: var(--space-tablet);
   }
 }
 
 @media (max-width: 767px) {
   .controls {
     bottom: 24px;
+    right: var(--space-mobile);
   }
   .navButton {
     width: 44px;
     height: 44px;
+  }
+}
+
+@media (hover: none) and (max-width: 767px) {
+  .affordance {
+    bottom: 24px;
+    left: var(--space-mobile);
   }
 }

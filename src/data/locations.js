@@ -24,7 +24,7 @@ export const locations = [
     id: 4,
     name: 'BAKRAJO',
     description: 'Modern residential living',
-    image: '/images/neigh-bakrajo.jpg',
+    image: '/images/bakrajo-hero.jpg',
     imageAlt: 'Modern residential living in Bakrajo'
   }
 ];

@@ -7,16 +7,16 @@ export const About = () => {
     <section className={styles.section} id="about" data-header-theme="light">
       <div className={styles.container}>
         <div className={styles.content}>
-          <TextReveal as="h2" className="display-3" text="Redefining luxury real estate in Sulaymaniyah." />
+          <TextReveal as="h2" className="display-3" text="A considered approach to property in Sulaymaniyah." />
           <div className={styles.textColumns}>
             <Reveal delay={0.2}>
               <p className={styles.paragraph}>
-                Suly Estates is a specialized agency focused exclusively on exceptional residential properties. We believe that a home is more than a structure—it is a foundation for life, shaped by its architecture and setting.
+                We focus on carefully presented residential property across Sulaymaniyah, with attention to architecture, setting and the information buyers actually need.
               </p>
             </Reveal>
             <Reveal delay={0.4}>
               <p className={styles.paragraph}>
-                By curating only the most distinctive residences in the region, we provide our clients with uncompromising quality and an elevated standard of living.
+                Our approach is straightforward: thoughtful presentation, clear property details and private conversations when a home feels worth exploring.
               </p>
             </Reveal>
           </div>

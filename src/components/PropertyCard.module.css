@@ -3,7 +3,6 @@
   flex-direction: column;
   gap: 24px;
   text-decoration: none;
-  group: card;
 }
 
 .imageWrapper {

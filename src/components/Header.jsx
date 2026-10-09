@@ -63,6 +63,20 @@ export const Header = () => {
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
+    
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && menuOpen) {
+        setMenuOpen(false);
+      }
+    };
+    
+    if (menuOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [menuOpen]);
 
   const navLinks = [
@@ -128,6 +142,9 @@ export const Header = () => {
             exit={{ opacity: 0, y: '-100%' }}
             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
             data-qa="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site Navigation"
           >
             <div className={styles.mobileMenuHeader}>
               <Link to="/" className={styles.logo} onClick={() => setMenuOpen(false)}>
@@ -149,7 +166,7 @@ export const Header = () => {
                   key={link.name}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 + (i * 0.1) }}
+                  transition={{ delay: 0.2 + (i * 0.05) }}
                 >
                   <Link 
                     to={link.href} 

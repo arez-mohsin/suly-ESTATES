@@ -46,8 +46,10 @@ export function usePerformanceProfile() {
   }, []);
 
   return {
-    reduceMotion: shouldReduceMotion || isConstrained,
+    reduceMotion: !!shouldReduceMotion,
     saveData,
-    constrainedDevice: isConstrained
+    constrainedDevice: isConstrained,
+    allowParallax: !shouldReduceMotion && !isConstrained,
+    allowBackdropBlur: !isConstrained
   };
 }
