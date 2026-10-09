@@ -4,23 +4,32 @@ import styles from './FeaturedListings.module.css';
 import { PropertyCard } from '../components/PropertyCard';
 import { Button } from '../components/Button';
 import { properties } from '../data/properties';
+import { Reveal, Stagger, StaggerItem } from '../components/Motion';
 
 export const FeaturedListings = () => {
   return (
     <section className={styles.section} id="properties" data-header-theme="dark">
       <div className={styles.header}>
         <div>
-          <p className="eyebrow">Curated for a remarkable life</p>
-          <h2 className={`display-3 ${styles.title}`}>Featured Listings</h2>
+          <Reveal y={16}>
+            <p className="eyebrow">Curated for a remarkable life</p>
+          </Reveal>
+          <Reveal delay={0.1} y={16}>
+            <h2 className={`display-3 ${styles.title}`}>Featured Listings</h2>
+          </Reveal>
         </div>
-        <Button as={Link} to="/properties" variant="link">View all properties</Button>
+        <Reveal delay={0.2} y={10}>
+          <Button as={Link} to="/properties" variant="link">View all properties</Button>
+        </Reveal>
       </div>
 
-      <div className={styles.grid}>
+      <Stagger staggerDelay={0.06} delay={0.2} className={styles.grid}>
         {properties.map(property => (
-          <PropertyCard key={property.id} property={property} />
+          <StaggerItem key={property.id} y={14}>
+            <PropertyCard property={property} />
+          </StaggerItem>
         ))}
-      </div>
+      </Stagger>
     </section>
   );
 };

@@ -164,9 +164,9 @@ export const Header = () => {
               {navLinks.map((link, i) => (
                 <motion.div
                   key={link.name}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 + (i * 0.05) }}
+                  transition={{ delay: 0.1 + (i * 0.05), duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
                 >
                   <Link 
                     to={link.href} 

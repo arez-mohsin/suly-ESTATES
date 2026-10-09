@@ -6,7 +6,8 @@ import { Button } from '../components/Button';
 import { PropertyCard } from '../components/PropertyCard';
 import { PropertyCarousel } from '../components/PropertyCarousel';
 import { PhotoTour } from '../components/PhotoTour';
-import { Reveal, TextReveal } from '../components/Motion';
+import { Reveal, TextReveal, Stagger, StaggerItem } from '../components/Motion';
+import { PageTransition } from '../components/PageTransition';
 import styles from './PropertyDetail.module.css';
 
 // Lazy load the lightbox wrapper to prevent plugin loading errors
@@ -55,13 +56,7 @@ export function PropertyDetail() {
   const relatedProperties = properties.filter(p => p.id !== property.id).slice(0, 3);
 
   return (
-    <motion.main 
-      className={styles.detailPage}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-    >
+    <PageTransition className={styles.detailPage}>
       <section className={styles.hero} data-header-theme="transparent">
         <PropertyCarousel images={property.gallery} onImageClick={openLightbox} />
         
@@ -90,30 +85,28 @@ export function PropertyDetail() {
       <div className={styles.contentGrid}>
         <div className={styles.mainContent}>
           <section className={styles.section} data-header-theme="dark">
-            <Reveal>
-              <div className={styles.factsGrid}>
-                <div className={styles.fact}>
-                  <span className="eyebrow">Bedrooms</span>
-                  <span className={styles.factValue}>{property.bedrooms}</span>
-                </div>
-                <div className={styles.fact}>
-                  <span className="eyebrow">Bathrooms</span>
-                  <span className={styles.factValue}>{property.bathrooms}</span>
-                </div>
-                <div className={styles.fact}>
-                  <span className="eyebrow">Interior Area</span>
-                  <span className={styles.factValue}>{property.interiorArea} m²</span>
-                </div>
-                <div className={styles.fact}>
-                  <span className="eyebrow">Plot Area</span>
-                  <span className={styles.factValue}>{property.plotArea} m²</span>
-                </div>
-                <div className={styles.fact}>
-                  <span className="eyebrow">Property Type</span>
-                  <span className={styles.factValue}>{property.type}</span>
-                </div>
-              </div>
-            </Reveal>
+            <Stagger staggerDelay={0.05} delay={0.1} className={styles.factsGrid}>
+              <StaggerItem y={12} className={styles.fact}>
+                <span className="eyebrow">Bedrooms</span>
+                <span className={styles.factValue}>{property.bedrooms}</span>
+              </StaggerItem>
+              <StaggerItem y={12} className={styles.fact}>
+                <span className="eyebrow">Bathrooms</span>
+                <span className={styles.factValue}>{property.bathrooms}</span>
+              </StaggerItem>
+              <StaggerItem y={12} className={styles.fact}>
+                <span className="eyebrow">Interior Area</span>
+                <span className={styles.factValue}>{property.interiorArea} m²</span>
+              </StaggerItem>
+              <StaggerItem y={12} className={styles.fact}>
+                <span className="eyebrow">Plot Area</span>
+                <span className={styles.factValue}>{property.plotArea} m²</span>
+              </StaggerItem>
+              <StaggerItem y={12} className={styles.fact}>
+                <span className="eyebrow">Property Type</span>
+                <span className={styles.factValue}>{property.type}</span>
+              </StaggerItem>
+            </Stagger>
           </section>
 
           <section data-header-theme="dark">
@@ -123,48 +116,62 @@ export function PropertyDetail() {
           </section>
 
           <section className={styles.descriptionSection} data-header-theme="dark">
-            <Reveal>
-              <h2 className="display-3">Overview</h2>
-              <div className={styles.descriptionText}>
-                {property.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
-              </div>
-            </Reveal>
+            <Stagger staggerDelay={0.08}>
+              <StaggerItem y={14}>
+                <h2 className="display-3">Overview</h2>
+              </StaggerItem>
+              <StaggerItem y={14}>
+                <div className={styles.descriptionText}>
+                  {property.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+                </div>
+              </StaggerItem>
+            </Stagger>
           </section>
 
           <section className={styles.featuresSection} data-header-theme="dark">
-            <Reveal>
+            <Stagger staggerDelay={0.06}>
               <div className={styles.featuresCol}>
-                <h3 className="eyebrow">Highlights</h3>
+                <StaggerItem y={12}>
+                  <h3 className="eyebrow">Highlights</h3>
+                </StaggerItem>
                 <ul className={styles.featureList}>
-                  {property.highlights.map((h, i) => <li key={i}>{h}</li>)}
+                  {property.highlights.map((h, i) => (
+                    <StaggerItem as="li" key={i} y={10}>{h}</StaggerItem>
+                  ))}
                 </ul>
               </div>
-            </Reveal>
-            <Reveal delay={0.1}>
+            </Stagger>
+            <Stagger staggerDelay={0.06} delay={0.1}>
               <div className={styles.featuresCol}>
-                <h3 className="eyebrow">Amenities</h3>
+                <StaggerItem y={12}>
+                  <h3 className="eyebrow">Amenities</h3>
+                </StaggerItem>
                 <ul className={styles.featureList}>
-                  {property.amenities.map((a, i) => <li key={i}>{a}</li>)}
+                  {property.amenities.map((a, i) => (
+                    <StaggerItem as="li" key={i} y={10}>{a}</StaggerItem>
+                  ))}
                 </ul>
               </div>
-            </Reveal>
+            </Stagger>
           </section>
 
           <section className={styles.locationSection} data-header-theme="dark">
             <Reveal>
               <h2 className="display-3">Approximate area</h2>
               <p className={styles.locationMeta}>{property.approximateLocation}</p>
-              <div className={styles.mapContainer} data-qa="property-map-wrapper">
-                <iframe
-                  src={property.mapUrl}
-                  className={styles.mapIframe}
-                  allowFullScreen=""
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title={`Map of ${property.neighborhood}`}
-                  data-qa="property-map-iframe"
-                ></iframe>
-              </div>
+              <Reveal delay={0.2}>
+                <div className={styles.mapContainer} data-qa="property-map-wrapper">
+                  <iframe
+                    src={property.mapUrl}
+                    className={styles.mapIframe}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title={`Map of ${property.neighborhood}`}
+                    data-qa="property-map-iframe"
+                  ></iframe>
+                </div>
+              </Reveal>
               <div className={styles.mapDisclosure} data-qa="property-map-disclosure">Location shown at neighborhood level for this demonstration listing.</div>
             </Reveal>
           </section>
@@ -199,14 +206,18 @@ export function PropertyDetail() {
       </div>
       
       <section className={styles.related} data-header-theme="dark">
-        <Reveal>
-          <h2 className="display-3" style={{marginBottom: '24px'}}>You may also like</h2>
+        <Stagger staggerDelay={0.06} delay={0.1}>
+          <StaggerItem y={16}>
+            <h2 className="display-3" style={{marginBottom: '24px'}}>You may also like</h2>
+          </StaggerItem>
           <div className={styles.relatedGrid}>
             {relatedProperties.map(p => (
-              <PropertyCard key={p.id} property={p} />
+              <StaggerItem key={p.id} y={16}>
+                <PropertyCard property={p} />
+              </StaggerItem>
             ))}
           </div>
-        </Reveal>
+        </Stagger>
       </section>
 
       {/* Lightbox Portal */}
@@ -221,6 +232,6 @@ export function PropertyDetail() {
           />
         </Suspense>
       )}
-    </motion.main>
+    </PageTransition>
   );
 }

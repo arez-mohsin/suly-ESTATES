@@ -1,19 +1,36 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { Stagger } from './Motion';
+import { usePerformanceProfile } from '../hooks/usePerformanceProfile';
 import styles from './PhotoTour.module.css';
 
+const EASE_PREMIUM = [0.21, 0.47, 0.32, 0.98];
+
 export const PhotoTour = ({ images, onImageClick }) => {
+  const { reduceMotion } = usePerformanceProfile();
+
+  const itemVariants = {
+    hidden: { opacity: 0, scale: reduceMotion ? 1 : 0.985 },
+    visible: { 
+      opacity: 1, 
+      scale: 1,
+      transition: { duration: 0.6, ease: EASE_PREMIUM }
+    }
+  };
+
   return (
     <div className={styles.photoTour}>
       <div className={styles.header}>
         <h3 className="eyebrow">Photo Tour</h3>
       </div>
-      <div className={styles.rail}>
+      <Stagger className={styles.rail} staggerDelay={0.05} delay={0.1}>
         {images.map((img, index) => (
-          <button 
+          <motion.button 
             key={index} 
             className={styles.thumbnailBtn}
             onClick={() => onImageClick(index)}
             aria-label={`View full image of ${img.alt}`}
+            variants={itemVariants}
           >
             <img 
               src={img.src} 
@@ -21,9 +38,9 @@ export const PhotoTour = ({ images, onImageClick }) => {
               loading="lazy" 
               className={styles.thumbnailImg}
             />
-          </button>
+          </motion.button>
         ))}
-      </div>
+      </Stagger>
     </div>
   );
 };

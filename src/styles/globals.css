@@ -26,7 +26,6 @@
   
   /* Motion */
   --motion-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  --motion-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
   --motion-normal: 400ms cubic-bezier(0.4, 0, 0.2, 1);
   --motion-slow: 800ms cubic-bezier(0.4, 0, 0.2, 1);
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './PropertyCard.module.css';
 import { Icons } from './Icons';
+import { ImageReveal } from './Motion';
 
 export const PropertyCard = ({ property }) => {
   return (
@@ -12,13 +13,15 @@ export const PropertyCard = ({ property }) => {
       data-qa-slug={property.slug}
     >
       <div className={styles.imageWrapper}>
-        <img 
-          src={property.heroImage || property.image} 
-          alt={property.name} 
-          loading="lazy"
-          decoding="async"
-          className={styles.image}
-        />
+        <ImageReveal scale={1.025} duration={1.0} className={styles.imageRevealContainer}>
+          <img 
+            src={property.heroImage || property.image} 
+            alt={property.name} 
+            loading="lazy"
+            decoding="async"
+            className={styles.image}
+          />
+        </ImageReveal>
       </div>
       
       <div className={styles.content}>

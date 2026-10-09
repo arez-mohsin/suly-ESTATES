@@ -7,10 +7,11 @@ import { Neighborhoods } from '../sections/Neighborhoods';
 import { PropertyLocationMap } from '../sections/PropertyLocationMap';
 import { About } from '../sections/About';
 import { PrivateConsultation } from '../sections/PrivateConsultation';
+import { PageTransition } from '../components/PageTransition';
 
 export function Home() {
   return (
-    <main>
+    <PageTransition>
       <Hero />
       <FeaturedListings />
       <SignatureResidence />
@@ -19,6 +20,6 @@ export function Home() {
       <PropertyLocationMap />
       <About />
       <PrivateConsultation />
-    </main>
+    </PageTransition>
   );
 }

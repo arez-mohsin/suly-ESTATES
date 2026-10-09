@@ -274,7 +274,7 @@
     padding: 16px var(--space-mobile);
     padding-bottom: calc(16px + env(safe-area-inset-bottom));
     gap: 16px;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: transform 400ms cubic-bezier(0.21, 0.47, 0.32, 0.98), opacity 400ms cubic-bezier(0.21, 0.47, 0.32, 0.98);
   }
   .hiddenMobile {
     transform: translateY(110%);

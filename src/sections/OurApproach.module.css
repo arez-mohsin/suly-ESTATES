@@ -33,14 +33,24 @@
 }
 
 .quote {
+  position: relative;
   font-family: var(--font-display);
   font-size: 1.5rem;
   line-height: 1.4;
   color: var(--color-deep-charcoal);
-  border-left: 1px solid var(--color-soft-stone);
   padding-left: 24px;
   margin-top: 16px;
   font-style: italic;
+}
+
+.quoteRule {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: var(--color-soft-stone);
+  transform-origin: top;
 }
 
 .imageWrapper {

@@ -61,10 +61,9 @@ export const Modal = ({ isOpen, onClose, children, dataQa }) => {
         {isOpen && (
           <motion.div 
             className={styles.content}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.21, 0.47, 0.32, 0.98] } }}
+            exit={{ opacity: 0, y: 12, transition: { duration: 0.2, ease: 'easeIn' } }}
             onClick={(e) => e.stopPropagation()} // Prevent bubbling to backdrop
           >
             <button 

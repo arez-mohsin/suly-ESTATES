@@ -9,12 +9,12 @@ export const About = () => {
         <div className={styles.content}>
           <TextReveal as="h2" className="display-3" text="A considered approach to property in Sulaymaniyah." />
           <div className={styles.textColumns}>
-            <Reveal delay={0.2}>
+            <Reveal delay={0.1} y={14}>
               <p className={styles.paragraph}>
                 We focus on carefully presented residential property across Sulaymaniyah, with attention to architecture, setting and the information buyers actually need.
               </p>
             </Reveal>
-            <Reveal delay={0.4}>
+            <Reveal delay={0.18} y={14}>
               <p className={styles.paragraph}>
                 Our approach is straightforward: thoughtful presentation, clear property details and private conversations when a home feels worth exploring.
               </p>

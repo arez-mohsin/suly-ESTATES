@@ -1,14 +1,10 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Reveal, TextReveal } from '../components/Motion';
+import { PageTransition } from '../components/PageTransition';
 
 export const LegalPage = ({ title, type }) => {
   return (
-    <motion.main 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
+    <PageTransition 
       style={{ paddingTop: '160px', paddingBottom: '120px', minHeight: '80vh', maxWidth: 'var(--max-width-content)', margin: '0 auto', paddingLeft: 'var(--space-desktop)', paddingRight: 'var(--space-desktop)' }}
       data-header-theme="dark"
     >
@@ -44,6 +40,6 @@ export const LegalPage = ({ title, type }) => {
           )}
         </div>
       </Reveal>
-    </motion.main>
+    </PageTransition>
   );
 };

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import styles from './Hero.module.css';
 import { Button } from '../components/Button';
+import { usePerformanceProfile } from '../hooks/usePerformanceProfile';
 
 const slides = [
   {
@@ -100,15 +101,28 @@ export const Hero = () => {
       opacity: 1,
       scale: 1,
       transition: { 
-        opacity: { duration: 1.2, ease: "easeInOut" },
+        opacity: { duration: 1.0, ease: [0.21, 0.47, 0.32, 0.98] },
         scale: { duration: 6, ease: "easeOut" } 
       }
     },
     exit: { 
       opacity: 0,
-      transition: { duration: 1.2, ease: "easeInOut" }
+      transition: { duration: 1.0, ease: [0.21, 0.47, 0.32, 0.98] }
     }
   };
+
+  const { scrollY } = useScroll();
+  const { reduceMotion, constrainedDevice, saveData } = usePerformanceProfile();
+  
+  // Parallax is allowed only if device is not constrained and not on mobile (assumed > 768px innerWidth roughly, 
+  // but framer-motion handles transform elegantly. We'll use a simple approach: map scrollY to transform but only apply if allowed)
+  const allowParallax = !reduceMotion && !constrainedDevice && !saveData && typeof window !== 'undefined' && window.innerWidth > 768;
+
+  const bgY = useTransform(scrollY, [0, 800], ['0%', allowParallax ? '-3%' : '0%']);
+  const contentY = useTransform(scrollY, [0, 800], ['0px', allowParallax ? '16px' : '0px']);
+  const contentOpacity = useTransform(scrollY, [0, 600], [1, allowParallax ? 0.88 : 1]);
+
+  const EASE_PREMIUM = [0.21, 0.47, 0.32, 0.98];
 
   return (
     <section 
@@ -119,7 +133,7 @@ export const Hero = () => {
       data-header-theme="transparent"
       data-active-slide={currentSlide + 1}
     >
-      <div className={styles.backgroundLayer}>
+      <motion.div className={styles.backgroundLayer} style={{ y: bgY }}>
         <AnimatePresence initial={false}>
           <motion.div 
             key={currentSlide}
@@ -138,17 +152,17 @@ export const Hero = () => {
             />
           </motion.div>
         </AnimatePresence>
-      </div>
+      </motion.div>
 
       <div className={styles.overlay} />
 
-      <div className={styles.contentGrid}>
+      <motion.div className={styles.contentGrid} style={{ y: contentY, opacity: contentOpacity }}>
         <div className={styles.contentMain}>
           <motion.div 
             className={styles.eyebrow}
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.1, ease: EASE_PREMIUM }}
           >
             <span className={styles.locationBadge}>
               <AnimatePresence mode="wait">
@@ -157,7 +171,7 @@ export const Hero = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: 0.4 }}
                 >
                   {slides[currentSlide].location}
                 </motion.span>
@@ -167,9 +181,9 @@ export const Hero = () => {
           
           <motion.h1 
             className={styles.title}
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: EASE_PREMIUM }}
           >
             Remarkable homes.<br />
             Distinctive living.
@@ -178,24 +192,24 @@ export const Hero = () => {
           <div className={styles.contentFooter}>
             <motion.p 
               className={styles.description}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              transition={{ duration: 0.8, delay: 0.35, ease: EASE_PREMIUM }}
             >
               Exceptional residences across Sulaymaniyah,<br/>
               selected for architecture, setting and quality of life.
             </motion.p>
             
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
+              transition={{ duration: 0.8, delay: 0.5, ease: EASE_PREMIUM }}
             >
               <Button as={Link} to="/properties" variant="transparentOutline">Explore properties</Button>
             </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       <div className={styles.sliderControls} role="tablist">
         {slides.map((slide, index) => (
