@@ -92,6 +92,11 @@
 .title {
   color: var(--color-off-white);
   margin-bottom: 8px;
+  font-size: clamp(3.6rem, 5.5vw, 5.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+  font-family: var(--font-display);
 }
 
 .description {
@@ -189,5 +194,11 @@
     right: auto;
     left: var(--space-mobile);
     gap: 8px;
+  }
+}
+
+@media (max-width: 440px) {
+  .title {
+    font-size: clamp(2.3rem, 9vw, 3.25rem); /* Reduced ~5-8% from 2.5rem */
   }
 }

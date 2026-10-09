@@ -76,7 +76,7 @@ export const Header = () => {
 
   return (
     <>
-      <header className={headerClass}>
+      <header className={headerClass} data-qa="site-header" data-qa-header-theme={headerTheme}>
         <Link to="/" className={styles.logo}>
           <span>SULY</span>
           <span>ESTATES</span>
@@ -103,6 +103,7 @@ export const Header = () => {
             className={styles.inquireBtn} 
             icon={false}
             onClick={() => window.dispatchEvent(new Event('open-consultation'))}
+            data-qa="header-inquire"
           >
             Inquire
           </Button>
@@ -111,6 +112,7 @@ export const Header = () => {
             onClick={() => setMenuOpen(true)}
             aria-label="Open menu"
             aria-expanded={menuOpen}
+            data-qa="mobile-menu-trigger"
           >
             <MenuIcon size={28} />
           </button>
@@ -125,6 +127,7 @@ export const Header = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: '-100%' }}
             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+            data-qa="mobile-menu"
           >
             <div className={styles.mobileMenuHeader}>
               <Link to="/" className={styles.logo} onClick={() => setMenuOpen(false)}>

@@ -7,9 +7,10 @@ import styles from './Properties.module.css';
 
 export function Properties() {
   return (
-    <motion.main 
-      className={styles.page} 
+    <motion.main
+      className={styles.page}
       data-header-theme="dark"
+      data-qa="properties-page"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -30,7 +31,7 @@ export function Properties() {
           </Reveal>
         </div>
         
-        <div className={styles.grid}>
+        <div className={styles.grid} data-qa="properties-grid">
           {properties.map((property, index) => (
             <Reveal key={property.id} delay={0.1 * (index % 4)}>
               <PropertyCard property={property} />

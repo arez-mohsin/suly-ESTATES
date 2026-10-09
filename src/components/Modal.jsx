@@ -4,7 +4,7 @@ import styles from './Modal.module.css';
 import { Icons } from './Icons';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export const Modal = ({ isOpen, onClose, children }) => {
+export const Modal = ({ isOpen, onClose, children, dataQa }) => {
   const dialogRef = useRef(null);
 
   useEffect(() => {
@@ -55,6 +55,7 @@ export const Modal = ({ isOpen, onClose, children }) => {
       onClick={handleBackdropClick}
       onClose={handleNativeClose}
       aria-modal="true"
+      data-qa={dataQa}
     >
       <AnimatePresence>
         {isOpen && (
@@ -70,6 +71,7 @@ export const Modal = ({ isOpen, onClose, children }) => {
               className={styles.closeButton} 
               onClick={onClose}
               aria-label="Close modal"
+              data-qa="consultation-close"
             >
               <Icons.Close />
             </button>

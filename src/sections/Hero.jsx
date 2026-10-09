@@ -117,6 +117,7 @@ export const Hero = () => {
       onTouchEnd={handleTouchEnd}
       aria-label="Featured Properties Carousel"
       data-header-theme="transparent"
+      data-active-slide={currentSlide + 1}
     >
       <div className={styles.backgroundLayer}>
         <AnimatePresence initial={false}>
@@ -166,7 +167,6 @@ export const Hero = () => {
           
           <motion.h1 
             className={styles.title}
-            style={{ fontSize: 'clamp(3.6rem, 5.5vw, 5.4rem)', lineHeight: 1.05, letterSpacing: '-0.02em', fontWeight: 400, fontFamily: 'var(--font-display)' }}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -206,6 +206,7 @@ export const Hero = () => {
               aria-label={`View slide ${index + 1}`}
               className={`${styles.sliderButton} ${currentSlide === index ? styles.active : ''}`}
               onClick={() => handleManualSelect(index)}
+              data-qa={`hero-slide-control-${index + 1}`}
             >
               0{index + 1}
               {currentSlide === index && (

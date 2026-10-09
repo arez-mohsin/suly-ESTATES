@@ -1,9 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import styles from './PropertyCarousel.module.css';
 
 export const PropertyCarousel = ({ images, onImageClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [documentHidden, setDocumentHidden] = useState(false);
+  
+  const timerRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % images.length);
@@ -13,41 +19,93 @@ export const PropertyCarousel = ({ images, onImageClick }) => {
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
   }, [images.length]);
 
-  useEffect(() => {
-    if (!isPlaying) return;
+  const resetTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
     
-    // Check if user prefers reduced motion
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (mediaQuery.matches) return;
+    // Do not auto-play if we want to pause
+    if (shouldReduceMotion || isHovered || isFocused || documentHidden) {
+      return;
+    }
 
-    const timer = setInterval(nextSlide, 5500);
-    return () => clearInterval(timer);
-  }, [isPlaying, nextSlide]);
+    timerRef.current = setTimeout(() => {
+      nextSlide();
+    }, 5500);
+  }, [shouldReduceMotion, isHovered, isFocused, documentHidden, nextSlide]);
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'ArrowRight') {
-        setIsPlaying(false);
-        nextSlide();
-      } else if (e.key === 'ArrowLeft') {
-        setIsPlaying(false);
-        prevSlide();
-      }
+    resetTimer();
+    return () => clearTimeout(timerRef.current);
+  }, [resetTimer, currentIndex]);
+
+  useEffect(() => {
+    const handleVisibility = () => {
+      setDocumentHidden(document.hidden);
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [nextSlide, prevSlide]);
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => document.removeEventListener('visibilitychange', handleVisibility);
+  }, []);
+
+  const handleManualNext = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    nextSlide();
+  };
+
+  const handleManualPrev = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    prevSlide();
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      handleManualNext();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      handleManualPrev();
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onImageClick(currentIndex);
+    }
+  };
+
+  const handleDragEnd = (event, info) => {
+    const swipeThreshold = 50;
+    if (info.offset.x < -swipeThreshold) {
+      handleManualNext();
+    } else if (info.offset.x > swipeThreshold) {
+      handleManualPrev();
+    }
+  };
 
   return (
     <div 
       className={styles.carousel} 
-      onMouseEnter={() => setIsPlaying(false)}
-      onMouseLeave={() => setIsPlaying(true)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      data-qa="property-carousel"
+      data-active-index={currentIndex}
+      data-active-src={images[currentIndex]?.src}
     >
-      <div 
+      <motion.div 
         className={styles.slidesContainer}
-        onClick={() => onImageClick(currentIndex)}
-        style={{ cursor: 'zoom-in' }}
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0.2}
+        onDragEnd={handleDragEnd}
+        whileTap={{ cursor: "grabbing" }}
+        style={{ cursor: 'grab' }}
       >
         {images.map((img, index) => {
           let className = styles.slide;
@@ -55,7 +113,6 @@ export const PropertyCarousel = ({ images, onImageClick }) => {
           if (index === (currentIndex - 1 + images.length) % images.length) className += ` ${styles.prev}`;
           if (index === (currentIndex + 1) % images.length) className += ` ${styles.next}`;
           
-          // Lazy load current and adjacent
           const shouldLoad = index === currentIndex || 
                             index === (currentIndex + 1) % images.length || 
                             index === (currentIndex - 1 + images.length) % images.length;
@@ -73,7 +130,7 @@ export const PropertyCarousel = ({ images, onImageClick }) => {
             </div>
           );
         })}
-      </div>
+      </motion.div>
       
       <div className={styles.overlay} />
       
@@ -84,24 +141,31 @@ export const PropertyCarousel = ({ images, onImageClick }) => {
         <div className={styles.buttons}>
           <button 
             className={styles.navButton} 
-            onClick={(e) => { e.stopPropagation(); setIsPlaying(false); prevSlide(); }}
+            onClick={handleManualPrev}
             aria-label="Previous image"
+            data-qa="property-carousel-prev"
           >
             ←
           </button>
           <button 
             className={styles.navButton} 
-            onClick={(e) => { e.stopPropagation(); setIsPlaying(false); nextSlide(); }}
+            onClick={handleManualNext}
             aria-label="Next image"
+            data-qa="property-carousel-next"
           >
             →
           </button>
         </div>
       </div>
       
-      <div className={styles.affordance} onClick={() => onImageClick(currentIndex)}>
+      <button 
+        className={styles.affordance} 
+        onClick={() => onImageClick(currentIndex)}
+        aria-label="View full gallery"
+        data-qa="property-gallery-open"
+      >
         View gallery
-      </div>
+      </button>
     </div>
   );
 };

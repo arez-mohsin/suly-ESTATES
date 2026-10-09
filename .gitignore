@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# QA screenshot captures
+qa-screenshots/
+qa-screenshots-pass-*.zip
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

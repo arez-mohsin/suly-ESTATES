@@ -7,13 +7,19 @@ export const GlobalConsultationModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [intent, setIntent] = useState('');
+  const [propertyName, setPropertyName] = useState('');
+  const [propertySlug, setPropertySlug] = useState('');
 
   useEffect(() => {
     const handleOpen = (e) => {
-      if (e.detail && e.detail.intent) {
-        setIntent(e.detail.intent);
+      if (e.detail) {
+        setIntent(e.detail.intent || '');
+        setPropertyName(e.detail.propertyName || '');
+        setPropertySlug(e.detail.propertySlug || '');
       } else {
         setIntent('');
+        setPropertyName('');
+        setPropertySlug('');
       }
       setIsModalOpen(true);
     };
@@ -32,12 +38,15 @@ export const GlobalConsultationModal = () => {
   };
 
   return (
-    <Modal isOpen={isModalOpen} onClose={closeModal}>
+    <Modal isOpen={isModalOpen} onClose={closeModal} dataQa="consultation-dialog">
       {!isSubmitted ? (
         <form className={styles.form} onSubmit={handleSubmit}>
+          <input type="hidden" name="propertySlug" value={propertySlug} />
           <div>
             <h3 className={styles.formTitle}>
-              {intent === 'viewing' ? 'Arrange a Viewing' : 'Request Consultation'}
+              {intent === 'viewing' 
+                ? (propertyName ? `Arrange a Viewing\n${propertyName}` : 'Arrange a Viewing') 
+                : (propertyName ? `Request Details\n${propertyName}` : 'Request Consultation')}
             </h3>
             <p className={styles.formDesc}>Please provide your details below.</p>
           </div>

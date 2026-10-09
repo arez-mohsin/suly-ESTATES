@@ -8,6 +8,7 @@ export default defineConfig([
   globalIgnores(['dist']),
   {
     files: ['**/*.{js,jsx}'],
+    ignores: ['qa-screenshots-pass*.js'],
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,
@@ -19,6 +20,14 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^React$' }],
+    },
+  },
+  {
+    files: ['qa-screenshots-pass*.js'],
+    extends: [js.configs.recommended],
+    languageOptions: {
+      // Mixes top-level Node.js code with page.evaluate() callbacks that run in-browser.
+      globals: { ...globals.node, ...globals.browser },
     },
   },
 ])

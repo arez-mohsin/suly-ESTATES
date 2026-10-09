@@ -5,7 +5,12 @@ import { Icons } from './Icons';
 
 export const PropertyCard = ({ property }) => {
   return (
-    <Link to={`/properties/${property.slug}`} className={styles.card}>
+    <Link
+      to={`/properties/${property.slug}`}
+      className={styles.card}
+      data-qa="property-card"
+      data-qa-slug={property.slug}
+    >
       <div className={styles.imageWrapper}>
         <img 
           src={property.heroImage || property.image} 

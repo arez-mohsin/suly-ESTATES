@@ -138,24 +138,26 @@ export function PropertyDetail() {
             <Reveal>
               <h2 className="display-3">Approximate area</h2>
               <p className={styles.locationMeta}>{property.approximateLocation}</p>
-              <div className={styles.mapContainer}>
-                <iframe 
-                  src={property.mapUrl} 
+              <div className={styles.mapContainer} data-qa="property-map-wrapper">
+                <iframe
+                  src={property.mapUrl}
                   className={styles.mapIframe}
-                  allowFullScreen="" 
-                  loading="lazy" 
+                  allowFullScreen=""
+                  loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   title={`Map of ${property.neighborhood}`}
+                  data-qa="property-map-iframe"
                 ></iframe>
-                <div className={styles.mapDisclosure}>Location shown at neighborhood level for this demonstration listing.</div>
               </div>
+              <div className={styles.mapDisclosure} data-qa="property-map-disclosure">Location shown at neighborhood level for this demonstration listing.</div>
             </Reveal>
           </section>
         </div>
 
         <aside className={styles.sidebar}>
-          <motion.div 
+          <motion.div
             className={styles.stickyCard}
+            data-qa="property-sticky-inquiry-bar"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
@@ -163,14 +165,16 @@ export function PropertyDetail() {
             <h3 className={styles.stickyPrice}>{property.price}</h3>
             <Button 
               className={styles.inquireBtn}
-              onClick={() => window.dispatchEvent(new CustomEvent('open-consultation', { detail: { intent: 'details' } }))}
+              onClick={() => window.dispatchEvent(new CustomEvent('open-consultation', { detail: { intent: 'details', propertyName: property.name, propertySlug: property.slug } }))}
+              data-qa="property-request-details"
             >
               Request details
             </Button>
             <Button 
               variant="transparent" 
               className={styles.viewingBtn}
-              onClick={() => window.dispatchEvent(new CustomEvent('open-consultation', { detail: { intent: 'viewing' } }))}
+              onClick={() => window.dispatchEvent(new CustomEvent('open-consultation', { detail: { intent: 'viewing', propertyName: property.name, propertySlug: property.slug } }))}
+              data-qa="property-arrange-viewing"
             >
               Arrange a viewing
             </Button>
@@ -197,6 +201,7 @@ export function PropertyDetail() {
             close={() => setLightboxOpen(false)}
             index={lightboxIndex}
             slides={property.gallery}
+            data-qa="property-lightbox"
           />
         </Suspense>
       )}
